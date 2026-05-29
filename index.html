@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privy Attribution Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0d0d12;
+    --surface:   #12121a;
+    --card:      #15151e;
+    --border:    #232330;
+    --accent:    #635bff;
+    --accent2:   #fa6d9a;
+    --accent3:   #00c48c;
+    --text:      #e6e6f0;
+    --muted:     #666;
+    --sans:      -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  .header {
+    padding: 2.5rem 3rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #12121a 0%, #0d0d18 100%);
+  }
+  .header-left h1 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .header-left p {
+    font-size: 0.73rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  .header-tag {
+    font-size: 0.72rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* Main layout */
+  .main { padding: 2.5rem 3rem; }
+
+  /* Stat cards */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .stat-card:nth-child(1)::before { background: var(--accent); }
+  .stat-card:nth-child(2)::before { background: var(--accent2); }
+  .stat-card:nth-child(3)::before { background: var(--accent3); }
+  .stat-card:nth-child(4)::before { background: #fabd6d; }
+  .stat-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .stat-sub {
+    font-size: 0.73rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+
+  /* Charts grid */
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .chart-card.wide {
+    grid-column: 1 / -1;
+  }
+  .chart-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 240px;
+  }
+
+  /* Table */
+  .table-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+  .table-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  thead th {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 0 1rem 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 0.75rem 1rem 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.82rem;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  .badge {
+    font-size: 0.65rem;
+    color: var(--accent);
+    background: rgba(99,91,255,0.1);
+    border: 1px solid rgba(99,91,255,0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Privy Attribution</h1>
+    <p>GA4 + HUBSPOT · LAST 30 DAYS · GENERATED MAY 29, 2026 AT 12:50 PM</p>
+  </div>
+  <div class="header-tag">Live Data</div>
+</div>
+
+<div class="main">
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total Sessions</div>
+      <div class="stat-value">46,331</div>
+      <div class="stat-sub">via GA4 · 30 days</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Top Channel</div>
+      <div class="stat-value" style="font-size:1.2rem;padding-top:0.4rem">Direct</div>
+      <div class="stat-sub">27,975 sessions</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Deals</div>
+      <div class="stat-value">11,145</div>
+      <div class="stat-sub">from HubSpot CRM</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pipeline Value</div>
+      <div class="stat-value" style="font-size:1.4rem;padding-top:0.3rem">$2,590,998</div>
+      <div class="stat-sub">across all deals</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-card wide">
+      <div class="chart-title">Session Trend · Last 30 Days</div>
+      <div class="chart-wrap">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Sessions by Channel (GA4)</div>
+      <div class="chart-wrap">
+        <canvas id="channelChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Deals by Attribution Source (HubSpot)</div>
+      <div class="chart-wrap">
+        <canvas id="dealChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-title">Deal Detail · Top 50 by Value</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Deal Name</th>
+          <th>Source</th>
+          <th>Amount</th>
+          <th>Stage</th>
+          <th>Close Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Coast To Coast Title & Escrow Services - Pilot Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$30,000</td>
+          <td>157720625</td>
+          <td>2024-05-20</td>
+        </tr>
+        <tr>
+          <td>CW Funding (10 accounts)</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$9,000</td>
+          <td>157720622</td>
+          <td>2024-05-20</td>
+        </tr>
+        <tr>
+          <td>Anchor Loans Pilot</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$5,000</td>
+          <td>159225364</td>
+          <td>2024-06-03</td>
+        </tr>
+        <tr>
+          <td>YouLand Pilot</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$5,000</td>
+          <td>157720619</td>
+          <td>2024-06-03</td>
+        </tr>
+        <tr>
+          <td>Certain Lending Pilot</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$5,000</td>
+          <td>159225364</td>
+          <td>2024-06-10</td>
+        </tr>
+        <tr>
+          <td>Easy Street Capital - Pilot</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$5,000</td>
+          <td>157720625</td>
+          <td>2024-07-08</td>
+        </tr>
+        <tr>
+          <td>Viktor Miljesic  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$2,390</td>
+          <td>240964436</td>
+          <td>2026-03-18</td>
+        </tr>
+        <tr>
+          <td>Eric Hunter  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$2,390</td>
+          <td>240964436</td>
+          <td>2026-04-07</td>
+        </tr>
+        <tr>
+          <td>Jon Keller  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$2,390</td>
+          <td>240964436</td>
+          <td>2026-04-08</td>
+        </tr>
+        <tr>
+          <td>Chris Carter  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$2,390</td>
+          <td>240964436</td>
+          <td>2026-05-09</td>
+        </tr>
+        <tr>
+          <td>Crosby Capital USA - Pilot Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$2,000</td>
+          <td>157720625</td>
+          <td>2024-03-26</td>
+        </tr>
+        <tr>
+          <td>Capital Fundings Pilot</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$2,000</td>
+          <td>157720624</td>
+          <td>2024-03-18</td>
+        </tr>
+        <tr>
+          <td>InstaMortgage Pilot</td>
+          <td><span class="badge">Unknown</span></td>
+          <td>$2,000</td>
+          <td>159225364</td>
+          <td>2024-03-18</td>
+        </tr>
+        <tr>
+          <td>Rodeo Funding Pilot Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$2,000</td>
+          <td>159225364</td>
+          <td>2024-03-26</td>
+        </tr>
+        <tr>
+          <td>Gold Leaf (Figuring out strategy)</td>
+          <td><span class="badge">Unknown</span></td>
+          <td>$2,000</td>
+          <td>157720622</td>
+          <td>2024-05-06</td>
+        </tr>
+        <tr>
+          <td>Accelerated Funding - Pilot Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$2,000</td>
+          <td>157720625</td>
+          <td>2024-04-15</td>
+        </tr>
+        <tr>
+          <td>Lynk Capital Pilot</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$2,000</td>
+          <td>157720625</td>
+          <td>2024-05-20</td>
+        </tr>
+        <tr>
+          <td>HomeLight</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$2,000</td>
+          <td>157720625</td>
+          <td>2024-05-06</td>
+        </tr>
+        <tr>
+          <td>Al Anderson   - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Tarnisha Shepard  - New Deal</td>
+          <td><span class="badge">Social Media</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Mielat Asrat  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Clive Romeo  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Simuel  Turner  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Kelly Anderson  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Jordan Laney  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Donald Long  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Al Mantini  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Brian Madsen  - New Deal</td>
+          <td><span class="badge">Referrals</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Lori Niles  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Elton Yutzy  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Brandon Johnson  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Benjamin Ericson  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Michelle Madera  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Marie Miller  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Michael Montes  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Mark Davis  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>David Bell  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Joshua Knisley  - New Deal</td>
+          <td><span class="badge">Offline</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Michael Hamilton  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,497</td>
+          <td>240964436</td>
+          <td>2024-09-06</td>
+        </tr>
+        <tr>
+          <td>Danish Abbasi  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-02-23</td>
+        </tr>
+        <tr>
+          <td>Joseph E Burks  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-03-11</td>
+        </tr>
+        <tr>
+          <td>Ed Hughes  - New Deal</td>
+          <td><span class="badge">Paid Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-03-16</td>
+        </tr>
+        <tr>
+          <td>Abbigail Bray  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-03-23</td>
+        </tr>
+        <tr>
+          <td>Gabriel Garcia  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-03-26</td>
+        </tr>
+        <tr>
+          <td>Frederick Rossborough  - New Deal</td>
+          <td><span class="badge">Email Marketing</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-04-03</td>
+        </tr>
+        <tr>
+          <td>Akihisa Ogawa  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-05-04</td>
+        </tr>
+        <tr>
+          <td>Wesley Cotner  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-05-14</td>
+        </tr>
+        <tr>
+          <td>Tamir Fridman  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-05-15</td>
+        </tr>
+        <tr>
+          <td>Cory Dennis  - New Deal</td>
+          <td><span class="badge">Direct Traffic</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-05-18</td>
+        </tr>
+        <tr>
+          <td>Kaitlyn Cossman  - New Deal</td>
+          <td><span class="badge">Organic Search</span></td>
+          <td>$1,430</td>
+          <td>240964436</td>
+          <td>2026-05-26</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  Privy Attribution Dashboard · Data pulled live from GA4 Property 299211655 + HubSpot CRM · May 29, 2026 at 12:50 PM
+</div>
+
+<script>
+const ACCENT  = '#7c6dfa';
+const ACCENT2 = '#fa6d9a';
+const ACCENT3 = '#6dfabd';
+const AMBER   = '#fabd6d';
+const MUTED   = '#6b6b80';
+const TEXT    = '#e8e8f0';
+
+const gridColor  = 'rgba(255,255,255,0.05)';
+const tickColor  = '#6b6b80';
+
+Chart.defaults.color = tickColor;
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 11;
+
+// Trend
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: ["04/29", "04/30", "05/01", "05/02", "05/03", "05/04", "05/05", "05/06", "05/07", "05/08", "05/09", "05/10", "05/11", "05/12", "05/13", "05/14", "05/15", "05/16", "05/17", "05/18", "05/19", "05/20", "05/21", "05/22", "05/23", "05/24", "05/25", "05/26", "05/27", "05/28", "05/29"],
+    datasets: [{
+      label: 'Sessions',
+      data: [1878, 1769, 1532, 672, 624, 1849, 1999, 1894, 1780, 1519, 773, 625, 1996, 1874, 1969, 1857, 1631, 845, 602, 1867, 1748, 1795, 1812, 1530, 691, 612, 1005, 1779, 1879, 1702, 658],
+      borderColor: ACCENT,
+      backgroundColor: 'rgba(124,109,250,0.08)',
+      borderWidth: 2,
+      pointRadius: 2,
+      pointHoverRadius: 5,
+      fill: true,
+      tension: 0.4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { maxTicksLimit: 10 } },
+      y: { grid: { color: gridColor }, beginAtZero: true }
+    }
+  }
+});
+
+// Channel bar
+new Chart(document.getElementById('channelChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Direct", "Organic Search", "Referral", "Unassigned", "Email", "Paid Search", "Organic Video", "Organic Social"],
+    datasets: [{
+      label: 'Sessions',
+      data: [27975, 11280, 3059, 2643, 742, 320, 207, 105],
+      backgroundColor: [ACCENT, ACCENT2, ACCENT3, AMBER, '#6db8fa', '#d46dfa', '#6dfad4', '#fa966d'],
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { maxRotation: 30 } },
+      y: { grid: { color: gridColor }, beginAtZero: true }
+    }
+  }
+});
+
+// Deal source doughnut
+new Chart(document.getElementById('dealChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ["Paid Search", "Organic Search", "Offline", "Unknown", "Direct Traffic", "Email Marketing", "Referrals", "Other Campaigns"],
+    datasets: [{
+      data: [3731, 2179, 1959, 1093, 1042, 488, 367, 169],
+      backgroundColor: [ACCENT, ACCENT2, ACCENT3, AMBER, '#6db8fa', '#d46dfa', '#6dfad4', '#fa966d'],
+      borderColor: '#1a1a26',
+      borderWidth: 2,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: { boxWidth: 10, padding: 12, color: TEXT }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
