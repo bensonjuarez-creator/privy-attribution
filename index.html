@@ -64,6 +64,23 @@
   .footer { font-size: 0.7rem; color: var(--muted); margin-top: 1.5rem;
     padding: 0.75rem 1rem; background: var(--card); border: 1px solid var(--border);
     border-radius: 8px; }
+
+  /* Info tooltips */
+  .info-wrap { position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .info-wrap .card-title { margin-bottom: 0; }
+  .info-btn { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border); color: var(--muted); font-size: 0.6rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; cursor: default;
+    flex-shrink: 0; position: relative; }
+  .info-btn:hover .tooltip { opacity: 1; visibility: visible; }
+  .tooltip { position: absolute; right: 0; top: 22px; width: 240px; background: #1e1e2e;
+    border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 0.8rem;
+    font-size: 0.72rem; color: var(--text); line-height: 1.5; z-index: 100;
+    opacity: 0; visibility: hidden; transition: opacity 0.15s; pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .section-info { display: flex; align-items: center; gap: 0.5rem; margin: 1.8rem 0 0.9rem; }
+  .section-info .section-hdr { margin: 0; }
+  .section-info .info-btn { margin-left: auto; }
 </style>
 </head>
 <body>
@@ -71,7 +88,7 @@
 <div class="header">
   <div class="header-left">
     <h1>Privy Attribution</h1>
-    <p>GA4 + HUBSPOT · LAST 30 DAYS (EXCLUDING APP.PRIVY.PRO) · GENERATED MAY 29, 2026 AT 01:27 PM</p>
+    <p>GA4 + HUBSPOT · 2026 YTD (EXCLUDING APP.PRIVY.PRO) · GENERATED MAY 29, 2026 AT 05:00 PM</p>
   </div>
   <div class="header-tag">Live Data</div>
 </div>
@@ -82,13 +99,13 @@
   <div class="stats">
     <div class="stat-card">
       <div class="stat-label">Total Sessions</div>
-      <div class="stat-value">10,547</div>
-      <div class="stat-sub">GA4 · 30 days · excl. app logins</div>
+      <div class="stat-value">110,585</div>
+      <div class="stat-sub">GA4 · 2026 YTD · excl. app logins</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Top Channel</div>
       <div class="stat-value" style="font-size:1.1rem">Direct</div>
-      <div class="stat-sub">6,035 sessions</div>
+      <div class="stat-sub">46,155 sessions</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">YTD Deals</div>
@@ -103,102 +120,123 @@
   </div>
 
   <!-- GA4 TRAFFIC -->
-  <div class="section-hdr">📈 GA4 Traffic · Last 30 Days</div>
+  <div class="section-info">
+    <div class="section-hdr">📈 GA4 Traffic · {ytd_year} YTD</div>
+    <div class="info-btn">i<span class="tooltip">Website traffic data pulled from Google Analytics 4. Excludes sessions from app.privy.pro (customer logins) so you only see marketing acquisition traffic.</span></div>
+  </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title">Session Trend</div>
+      <div class="info-wrap">
+        <div class="card-title">Session Trend</div>
+        <div class="info-btn">i<span class="tooltip">Daily website sessions throughout the year. Helps you spot traffic spikes, drops, and weekly patterns. Weekends typically show lower traffic for B2B products.</span></div>
+      </div>
       <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Sessions by Channel</div>
+      <div class="info-wrap">
+        <div class="card-title">Sessions by Channel</div>
+        <div class="info-btn">i<span class="tooltip">How visitors are finding your website broken down by marketing channel. Organic Search = Google/Bing. Direct = typed URL or unknown source. Referral = link from another site.</span></div>
+      </div>
       <div class="chart-wrap"><canvas id="channelChart"></canvas></div>
     </div>
   </div>
 
   <!-- AUDIENCE -->
-  <div class="section-hdr">👥 Audience Breakdown</div>
+  <div class="section-info">
+    <div class="section-hdr">👥 Audience Breakdown</div>
+    <div class="info-btn">i<span class="tooltip">Who is visiting your website — what devices they use, whether they've been before, and where they're located geographically.</span></div>
+  </div>
   <div class="grid-3">
     <div class="card">
-      <div class="card-title">Device Breakdown</div>
+      <div class="info-wrap">
+        <div class="card-title">Device Breakdown</div>
+        <div class="info-btn">i<span class="tooltip">Shows whether visitors are on desktop, mobile, or tablet. B2B products typically skew heavily desktop. High mobile traffic may indicate brand awareness campaigns reaching consumers.</span></div>
+      </div>
       <div class="chart-wrap-sm"><canvas id="deviceChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">New vs Returning Visitors</div>
+      <div class="info-wrap">
+        <div class="card-title">New vs Returning Visitors</div>
+        <div class="info-btn">i<span class="tooltip">New = first-time visitors to the site. Returning = people who have visited before. High returning % means strong brand loyalty but may indicate you need more top-of-funnel acquisition efforts.</span></div>
+      </div>
       <div class="chart-wrap-sm"><canvas id="nrChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Top Regions</div>
+      <div class="info-wrap">
+        <div class="card-title">Top Regions</div>
+        <div class="info-btn">i<span class="tooltip">US states driving the most website traffic. Useful for geo-targeting paid ads and understanding where your market concentration is. "(not set)" means GA4 couldn't determine the location — often VPN users or privacy browsers.</span></div>
+      </div>
       <table>
         <thead><tr><th>Region</th><th>Sessions</th><th style="width:40%">Share</th></tr></thead>
         <tbody>
         <tr>
-          <td>(not set)</td>
-          <td>2,482</td>
+          <td>Iowa</td>
+          <td>16,618</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
             <div style="background:#635bff;height:8px;border-radius:4px;width:100%"></div>
           </div></td>
         </tr>
         <tr>
+          <td>Virginia</td>
+          <td>9,771</td>
+          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
+            <div style="background:#635bff;height:8px;border-radius:4px;width:59%"></div>
+          </div></td>
+        </tr>
+        <tr>
           <td>California</td>
-          <td>873</td>
+          <td>9,407</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:35%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:57%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>Texas</td>
-          <td>796</td>
+          <td>(not set)</td>
+          <td>8,196</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:32%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Florida</td>
-          <td>614</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:25%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:49%"></div>
           </div></td>
         </tr>
         <tr>
           <td>Colorado</td>
-          <td>429</td>
+          <td>5,124</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:17%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:31%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>New York</td>
-          <td>281</td>
+          <td>Texas</td>
+          <td>4,728</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:11%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:28%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>Illinois</td>
-          <td>265</td>
+          <td>Florida</td>
+          <td>4,534</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:11%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:27%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>Georgia</td>
-          <td>263</td>
+          <td>Washington</td>
+          <td>3,950</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:11%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:24%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>Virginia</td>
-          <td>239</td>
+          <td>Hessen</td>
+          <td>2,971</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:10%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:18%"></div>
           </div></td>
         </tr>
         <tr>
-          <td>Arizona</td>
-          <td>208</td>
+          <td>New Jersey</td>
+          <td>2,527</td>
           <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:8%"></div>
+            <div style="background:#635bff;height:8px;border-radius:4px;width:15%"></div>
           </div></td>
         </tr></tbody>
       </table>
@@ -206,180 +244,219 @@
   </div>
 
   <!-- ENGAGEMENT -->
-  <div class="section-hdr">⚡ Engagement by Channel</div>
+  <div class="section-info">
+    <div class="section-hdr">⚡ Engagement by Channel</div>
+    <div class="info-btn">i<span class="tooltip">How engaged visitors are after arriving from each channel. Low bounce rate and long session duration = high quality traffic. High bounce rate = visitors leaving quickly without exploring.</span></div>
+  </div>
   <div class="card" style="margin-bottom:1rem">
-    <div class="card-title">Bounce Rate & Session Duration by Channel</div>
+    <div class="info-wrap">
+      <div class="card-title">Bounce Rate & Session Duration by Channel</div>
+      <div class="info-btn">i<span class="tooltip">Bounce Rate: % of visitors who leave after viewing only one page. Under 40% is good for B2B. Avg Duration: how long visitors spend on the site. Longer = more engaged. Email and Referral typically show the best engagement as those visitors arrive with intent.</span></div>
+    </div>
     <table>
       <thead><tr><th>Channel</th><th>Sessions</th><th>Bounce Rate</th><th>Avg Duration</th></tr></thead>
       <tbody>
         <tr>
           <td>Direct</td>
-          <td>6,035</td>
-          <td>68.0%</td>
-          <td>2m 31s</td>
-        </tr>
-        <tr>
-          <td>Organic Search</td>
-          <td>2,621</td>
-          <td>28.3%</td>
-          <td>3m 52s</td>
+          <td>46,155</td>
+          <td>66.6%</td>
+          <td>1m 55s</td>
         </tr>
         <tr>
           <td>Unassigned</td>
-          <td>878</td>
-          <td>86.3%</td>
-          <td>1m 41s</td>
+          <td>38,298</td>
+          <td>91.6%</td>
+          <td>0m 16s</td>
+        </tr>
+        <tr>
+          <td>Organic Search</td>
+          <td>18,708</td>
+          <td>31.7%</td>
+          <td>4m 21s</td>
         </tr>
         <tr>
           <td>Referral</td>
-          <td>603</td>
-          <td>34.3%</td>
-          <td>7m 37s</td>
+          <td>3,612</td>
+          <td>30.1%</td>
+          <td>8m 06s</td>
         </tr>
         <tr>
           <td>Email</td>
-          <td>162</td>
-          <td>33.3%</td>
-          <td>8m 10s</td>
-        </tr>
-        <tr>
-          <td>Organic Video</td>
-          <td>93</td>
-          <td>28.0%</td>
-          <td>3m 11s</td>
+          <td>2,471</td>
+          <td>36.3%</td>
+          <td>2m 30s</td>
         </tr>
         <tr>
           <td>Organic Social</td>
-          <td>84</td>
-          <td>39.3%</td>
-          <td>1m 05s</td>
+          <td>537</td>
+          <td>36.9%</td>
+          <td>3m 55s</td>
+        </tr>
+        <tr>
+          <td>Organic Video</td>
+          <td>459</td>
+          <td>31.6%</td>
+          <td>5m 03s</td>
         </tr>
         <tr>
           <td>Paid Search</td>
-          <td>71</td>
-          <td>50.7%</td>
-          <td>3m 23s</td>
+          <td>340</td>
+          <td>42.6%</td>
+          <td>3m 28s</td>
+        </tr>
+        <tr>
+          <td>Cross-network</td>
+          <td>4</td>
+          <td>75.0%</td>
+          <td>0m 17s</td>
+        </tr>
+        <tr>
+          <td>Paid Other</td>
+          <td>1</td>
+          <td>100.0%</td>
+          <td>0m 05s</td>
         </tr></tbody>
     </table>
   </div>
 
   <!-- LANDING PAGES -->
-  <div class="section-hdr">🏠 Top Landing Pages · Last 30 Days</div>
+  <div class="section-info">
+    <div class="section-hdr">🏠 Top Landing Pages · {ytd_year} YTD</div>
+    <div class="info-btn">i<span class="tooltip">The first page visitors land on when they arrive at your site. High-traffic pages with low conversion rates are your biggest optimization opportunities.</span></div>
+  </div>
   <div class="card" style="margin-bottom:1rem">
-    <div class="card-title">Pages driving the most traffic (excl. app logins)</div>
+    <div class="info-wrap">
+      <div class="card-title">Pages driving the most traffic · {ytd_year} YTD (excl. app logins)</div>
+      <div class="info-btn">i<span class="tooltip">Conv Rate = conversions divided by sessions for that page. A 114% rate on /users/sign_in is a data artifact — GA4 is counting app logins as conversions. Focus on /pricing/ (341 sessions, 0% conv rate) as the biggest optimization opportunity.</span></div>
+    </div>
     <table>
       <thead><tr><th>Page</th><th>Sessions</th><th>Conversions</th><th>Conv Rate</th></tr></thead>
       <tbody>
         <tr>
           <td style="font-size:0.78rem;word-break:break-all">/</td>
-          <td>4,426</td>
-          <td>6</td>
-          <td>0.1%</td>
+          <td>62,334</td>
+          <td>225</td>
+          <td>0.4%</td>
         </tr>
         <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/investors/</td>
-          <td>800</td>
+          <td style="font-size:0.78rem;word-break:break-all">/deal-flow</td>
+          <td>4,450</td>
           <td>0</td>
           <td>0.0%</td>
         </tr>
         <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/en/</td>
-          <td>613</td>
+          <td style="font-size:0.78rem;word-break:break-all">/deal-stream-v2</td>
+          <td>3,909</td>
+          <td>0</td>
+          <td>0.0%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/pricing-deal-flow</td>
+          <td>3,611</td>
           <td>0</td>
           <td>0.0%</td>
         </tr>
         <tr>
           <td style="font-size:0.78rem;word-break:break-all">(not set)</td>
-          <td>354</td>
+          <td>2,951</td>
+          <td>1</td>
+          <td>0.0%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/en/</td>
+          <td>2,865</td>
+          <td>12</td>
+          <td>0.4%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/pricing/</td>
+          <td>2,317</td>
+          <td>26</td>
+          <td>1.1%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/pricing-deal-stream-v2</td>
+          <td>2,171</td>
           <td>0</td>
           <td>0.0%</td>
         </tr>
         <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/pricing/</td>
-          <td>341</td>
+          <td style="font-size:0.78rem;word-break:break-all">/investors/</td>
+          <td>1,413</td>
+          <td>10</td>
+          <td>0.7%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/missed-deals</td>
+          <td>1,281</td>
           <td>0</td>
           <td>0.0%</td>
         </tr>
         <tr>
           <td style="font-size:0.78rem;word-break:break-all">/users/sign_in</td>
-          <td>214</td>
-          <td>244</td>
-          <td>114.0%</td>
+          <td>1,075</td>
+          <td>878</td>
+          <td>81.7%</td>
         </tr>
         <tr>
-          <td style="font-size:0.78rem;word-break:break-all"></td>
-          <td>181</td>
-          <td>1</td>
-          <td>0.6%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/agents-page/</td>
-          <td>119</td>
+          <td style="font-size:0.78rem;word-break:break-all">/pricing-missed-deals</td>
+          <td>1,019</td>
           <td>0</td>
           <td>0.0%</td>
+        </tr>
+        <tr>
+          <td style="font-size:0.78rem;word-break:break-all">/real-estate-markets/</td>
+          <td>408</td>
+          <td>10</td>
+          <td>2.5%</td>
         </tr>
         <tr>
           <td style="font-size:0.78rem;word-break:break-all">/dashboard</td>
-          <td>106</td>
-          <td>27</td>
-          <td>25.5%</td>
+          <td>345</td>
+          <td>90</td>
+          <td>26.1%</td>
         </tr>
         <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/about/</td>
-          <td>58</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/markets/</td>
-          <td>50</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/privypro/en/articles/8927985-investor-lesson-1-market-analysis-and-investor-act</td>
-          <td>43</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/pricing</td>
-          <td>42</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/en/articles/9899157-what-is-privy</td>
-          <td>38</td>
-          <td>2</td>
-          <td>5.3%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/privypro/en/articles/8927994-investor-lesson-2-finding-deals</td>
-          <td>31</td>
-          <td>0</td>
-          <td>0.0%</td>
+          <td style="font-size:0.78rem;word-break:break-all">/contact/</td>
+          <td>301</td>
+          <td>20</td>
+          <td>6.6%</td>
         </tr></tbody>
     </table>
   </div>
 
   <!-- HUBSPOT ATTRIBUTION -->
-  <div class="section-hdr">💼 HubSpot Attribution · 2026 YTD</div>
+  <div class="section-info">
+    <div class="section-hdr">💼 HubSpot Attribution · {ytd_year} YTD</div>
+    <div class="info-btn">i<span class="tooltip">Deal and pipeline data pulled from HubSpot CRM. Shows which marketing channels are actually generating sales opportunities, not just website traffic.</span></div>
+  </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title">Deals by Attribution Source</div>
+      <div class="info-wrap">
+        <div class="card-title">Deals by Attribution Source</div>
+        <div class="info-btn">i<span class="tooltip">Which channel HubSpot recorded as the source when each deal was created. Organic Search dominating here means SEO is your primary revenue driver — invest accordingly.</span></div>
+      </div>
       <div class="chart-wrap"><canvas id="dealChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Deal Stage Funnel</div>
+      <div class="info-wrap">
+        <div class="card-title">Deal Stage Funnel</div>
+        <div class="info-btn">i<span class="tooltip">How many deals are sitting in each pipeline stage. Stages with large deal counts are where prospects are getting stuck. Use this to identify bottlenecks in your sales process.</span></div>
+      </div>
       <div class="chart-wrap"><canvas id="stageChart"></canvas></div>
     </div>
   </div>
 
   <!-- SOURCE ANALYSIS -->
-  <div class="section-hdr">🔍 Source Deep Dive · Win Rate & Time to Close</div>
+  <div class="section-info">
+    <div class="section-hdr">🔍 Source Deep Dive · Win Rate & Time to Close</div>
+    <div class="info-btn">i<span class="tooltip">Compares the quality of leads from each channel — not just quantity. Win Rate = % of deals that have a close date recorded. Avg Days to Close = how long from deal creation to close. Lower days = faster sales cycle.</span></div>
+  </div>
   <div class="card" style="margin-bottom:1rem">
-    <div class="card-title">Performance by attribution source</div>
+    <div class="info-wrap">
+      <div class="card-title">Performance by attribution source</div>
+      <div class="info-btn">i<span class="tooltip">Note: 100% win rate and 0 days to close across all sources indicates HubSpot is recording close date = create date for most deals. For accurate win rate and time-to-close data, ensure deal stages and close dates are being updated as deals progress through the pipeline.</span></div>
+    </div>
     <table>
       <thead><tr><th>Source</th><th>Deals</th><th>Pipeline Value</th><th>Win Rate</th><th>Avg Days to Close</th></tr></thead>
       <tbody>
@@ -443,7 +520,10 @@
   </div>
 
   <!-- DEAL TABLE -->
-  <div class="section-hdr">📋 Deal Detail · 2026 YTD · Top 50 by Value</div>
+  <div class="section-info">
+    <div class="section-hdr">📋 Deal Detail · {ytd_year} YTD · Top 50 by Value</div>
+    <div class="info-btn">i<span class="tooltip">Individual deal records from HubSpot showing the attribution source recorded at deal creation. Sorted by deal value. Use this to spot patterns in which channels bring in your highest-value customers.</span></div>
+  </div>
   <div class="card" style="margin-bottom:1rem">
     <table>
       <thead><tr><th>Deal Name</th><th>Source</th><th>Amount</th><th>Created</th><th>Close Date</th></tr></thead>
@@ -802,7 +882,7 @@
   </div>
 
   <div class="footer">
-    Privy Attribution Dashboard · GA4 Property 299211655 + HubSpot CRM · App login traffic excluded (app.privy.pro) · Generated May 29, 2026 at 01:27 PM
+    Privy Attribution Dashboard · GA4 Property 299211655 + HubSpot CRM · App login traffic excluded (app.privy.pro) · 2026 YTD · Generated May 29, 2026 at 05:00 PM
   </div>
 
 </div>
@@ -818,8 +898,8 @@ Chart.defaults.font.size = 11;
 // Trend
 new Chart(document.getElementById('trendChart'), {
   type: 'line',
-  data: { labels: ["04/29", "04/30", "05/01", "05/02", "05/03", "05/04", "05/05", "05/06", "05/07", "05/08", "05/09", "05/10", "05/11", "05/12", "05/13", "05/14", "05/15", "05/16", "05/17", "05/18", "05/19", "05/20", "05/21", "05/22", "05/23", "05/24", "05/25", "05/26", "05/27", "05/28", "05/29"], datasets: [{
-    data: [351, 397, 339, 190, 232, 370, 412, 402, 367, 353, 302, 263, 445, 339, 426, 384, 388, 288, 237, 380, 349, 395, 368, 332, 189, 202, 295, 352, 444, 337, 159], borderColor: '#635bff', backgroundColor: 'rgba(99,91,255,0.08)',
+  data: { labels: ["01/01", "01/02", "01/03", "01/04", "01/05", "01/06", "01/07", "01/08", "01/09", "01/10", "01/11", "01/12", "01/13", "01/14", "01/15", "01/16", "01/17", "01/18", "01/19", "01/20", "01/21", "01/22", "01/23", "01/24", "01/25", "01/26", "01/27", "01/28", "01/29", "01/30", "01/31", "02/01", "02/02", "02/03", "02/04", "02/05", "02/06", "02/07", "02/08", "02/09", "02/10", "02/11", "02/12", "02/13", "02/14", "02/15", "02/16", "02/17", "02/18", "02/19", "02/20", "02/21", "02/22", "02/23", "02/24", "02/25", "02/26", "02/27", "02/28", "03/01", "03/02", "03/03", "03/04", "03/05", "03/06", "03/07", "03/08", "03/09", "03/10", "03/11", "03/12", "03/13", "03/14", "03/15", "03/16", "03/17", "03/18", "03/19", "03/20", "03/21", "03/22", "03/23", "03/24", "03/25", "03/26", "03/27", "03/28", "03/29", "03/30", "03/31", "04/01", "04/02", "04/03", "04/04", "04/05", "04/06", "04/07", "04/08", "04/09", "04/10", "04/11", "04/12", "04/13", "04/14", "04/15", "04/16", "04/17", "04/18", "04/19", "04/20", "04/21", "04/22", "04/23", "04/24", "04/25", "04/26", "04/27", "04/28", "04/29", "04/30", "05/01", "05/02", "05/03", "05/04", "05/05", "05/06", "05/07", "05/08", "05/09", "05/10", "05/11", "05/12", "05/13", "05/14", "05/15", "05/16", "05/17", "05/18", "05/19", "05/20", "05/21", "05/22", "05/23", "05/24", "05/25", "05/26", "05/27", "05/28", "05/29"], datasets: [{
+    data: [307, 418, 312, 325, 486, 515, 496, 444, 386, 278, 314, 716, 600, 581, 529, 481, 403, 267, 419, 465, 427, 471, 324, 259, 250, 412, 479, 388, 449, 387, 358, 307, 512, 470, 629, 499, 372, 244, 232, 445, 445, 526, 538, 302, 327, 263, 435, 316, 829, 1945, 1016, 274, 313, 989, 1109, 1065, 1773, 1585, 282, 259, 1329, 701, 667, 502, 683, 295, 276, 754, 1063, 1983, 1027, 331, 251, 239, 743, 953, 522, 398, 642, 204, 249, 772, 373, 9764, 9131, 8839, 5639, 5762, 1160, 837, 718, 568, 594, 404, 340, 426, 525, 532, 375, 317, 204, 222, 465, 528, 458, 443, 402, 253, 270, 389, 373, 342, 351, 275, 284, 214, 330, 306, 351, 397, 339, 190, 232, 370, 412, 402, 367, 353, 302, 263, 445, 339, 426, 384, 388, 288, 237, 380, 349, 395, 368, 332, 189, 202, 295, 352, 444, 343, 249], borderColor: '#635bff', backgroundColor: 'rgba(99,91,255,0.08)',
     borderWidth: 2, pointRadius: 2, fill: true, tension: 0.4
   }]},
   options: { responsive: true, maintainAspectRatio: false,
@@ -831,8 +911,8 @@ new Chart(document.getElementById('trendChart'), {
 // Channel
 new Chart(document.getElementById('channelChart'), {
   type: 'bar',
-  data: { labels: ["Direct", "Organic Search", "Unassigned", "Referral", "Email", "Organic Video", "Organic Social", "Paid Search"], datasets: [{
-    data: [6035, 2621, 878, 603, 162, 93, 84, 71], backgroundColor: COLORS, borderRadius: 4, borderSkipped: false
+  data: { labels: ["Direct", "Unassigned", "Organic Search", "Referral", "Email", "Organic Social", "Organic Video", "Paid Search", "Cross-network", "Paid Other"], datasets: [{
+    data: [46155, 38298, 18708, 3612, 2471, 537, 459, 340, 4, 1], backgroundColor: COLORS, borderRadius: 4, borderSkipped: false
   }]},
   options: { responsive: true, maintainAspectRatio: false,
     plugins: { legend: { display: false } },
@@ -843,8 +923,8 @@ new Chart(document.getElementById('channelChart'), {
 // Device
 new Chart(document.getElementById('deviceChart'), {
   type: 'doughnut',
-  data: { labels: ["Desktop", "Mobile", "Tablet"], datasets: [{
-    data: [8639, 1628, 46], backgroundColor: COLORS, borderColor: '#15151e', borderWidth: 2
+  data: { labels: ["Desktop", "Mobile", "Tablet", "Smart Tv"], datasets: [{
+    data: [94303, 15285, 478, 19], backgroundColor: COLORS, borderColor: '#15151e', borderWidth: 2
   }]},
   options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
     plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: '#e6e6f0' } } } }
@@ -854,7 +934,7 @@ new Chart(document.getElementById('deviceChart'), {
 new Chart(document.getElementById('nrChart'), {
   type: 'doughnut',
   data: { labels: ["New", "Returning", "(Not Set)", ""], datasets: [{
-    data: [6464, 3488, 545, 171], backgroundColor: ['#635bff','#00c48c'], borderColor: '#15151e', borderWidth: 2
+    data: [87090, 20422, 3759, 64], backgroundColor: ['#635bff','#00c48c'], borderColor: '#15151e', borderWidth: 2
   }]},
   options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
     plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: '#e6e6f0' } } } }
