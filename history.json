@@ -1,0 +1,57 @@
+[
+  {
+    "month": "2026-05",
+    "month_label": "May 2026",
+    "total_sessions": 110603,
+    "total_deals": 367,
+    "total_revenue": 111708.0,
+    "top_channel": "Direct",
+    "top_deal_source": "Organic Search",
+    "sc_total_clicks": 1815,
+    "sc_branded_clicks": 1815,
+    "sc_unbranded_clicks": 0,
+    "top_queries": [
+      "privy",
+      "privy real estate",
+      "privy pro",
+      "privy real estate login",
+      "privy login"
+    ],
+    "source_breakdown": {
+      "Organic Search": {
+        "count": 253,
+        "amount": 71277.0
+      },
+      "Direct Traffic": {
+        "count": 48,
+        "amount": 18432.0
+      },
+      "Offline": {
+        "count": 45,
+        "amount": 14500.0
+      },
+      "Other Campaigns": {
+        "count": 6,
+        "amount": 47.0
+      },
+      "Paid Search": {
+        "count": 5,
+        "amount": 3101.0
+      },
+      "Referrals": {
+        "count": 5,
+        "amount": 2364.0
+      },
+      "Ai Referrals": {
+        "count": 4,
+        "amount": 557.0
+      },
+      "Email Marketing": {
+        "count": 1,
+        "amount": 1430.0
+      }
+    },
+    "ai_summary": "# Attribution Analysis: May 2026\n**Prepared for CEO | Marketing Director**\n\n---\n\n## KEY FINDINGS\n\nWe're closing 355 deals with $111K pipeline, but our attribution infrastructure is fundamentally broken and masking real performance.\n\n**The Good:** Organic Search dominates deal generation (253 deals, $71K pipeline) despite representing only 17% of traffic. These users spend 4m21s on-site with 32% bounce\u2014our highest-quality channel. Referral traffic shows exceptional engagement (8m06s avg, 30% bounce) but converts to only 5 deals, signaling a massive conversion gap.\n\n**The Bad:** 38,298 sessions are \"Unassigned\" (35% of total traffic) with 92% bounce and 16-second sessions\u2014this is junk traffic or tracking failure. Direct traffic (46,155 sessions) shows 67% bounce, suggesting significant dark social or attribution loss from logged-in users. HubSpot reports 0 days to close on all deals, making funnel velocity analysis impossible.\n\n**The Ugly:** We have ZERO unbranded search presence. Every single search click (1,815 total) is branded, meaning we're invisible to investors who don't already know us. We're not in the consideration set\u2014we're just the login page for existing users. 100% brand dependency is an existential growth risk.\n\nIowa delivers 16,618 sessions (15% of total)\u20142x Virginia, our #2 state. This anomaly needs investigation: Are we running geo-targeted campaigns we're not tracking? Is this a single power user or bot? This could be masking true geographic performance.\n\nThe /pricing/ conversion disaster continues: 2,317 sessions across pricing pages, only 26 conversions (1.1% CVR). Compare this to homepage at 0.4% CVR despite 27x more traffic. Pricing pages attract high-intent users but fail to convert them\u2014likely friction in signup flow or value communication breakdown.\n\n---\n\n## RED FLAGS\n\n1. **Attribution blindness at scale:** 35% of traffic is \"Unassigned\" and HubSpot's 0-day close data means we cannot calculate CAC, optimize spend, or understand true source performance.\n\n2. **Email channel dormant:** 2,471 email sessions but only 1 deal YTD. The 91-contact survey cohort remains untapped\u2014we're sitting on qualified leads while paying to acquire new traffic.\n\n3. **No organic discovery engine:** 100% branded search means zero top-of-funnel inbound. We're entirely dependent on paid acquisition, word-of-mouth, and existing brand awareness. Growth ceiling is immediate.\n\n---\n\n## TOP 3 ACTIONS THIS MONTH\n\n**1. FIX ATTRIBUTION INFRASTRUCTURE (Week 1)**\n- Audit \"Unassigned\" traffic source: Verify GA4 tracking on all pages, check for stripping parameters in redirects\n- Force HubSpot deal creation date fix: Require sales team to backfill accurate close dates for Q2 deals or implement automated timestamp capture\n- Implement UTM governance: No campaign launches without proper tagging; audit all active referral partnerships for tracking\n\n**2. ACTIVATE EMAIL COHORT (Week 1-2)**\n- Deploy targeted campaign to 91-survey respondents with personalized deal-flow value prop\n- A/B test: Case study email vs. feature highlight vs. direct sales outreach\n- Target: 15 deals from this cohort by June 15 (16% conversion would match organic search quality)\n\n**3. BUILD UNBRANDED SEARCH PRESENCE (Week 2-4)**\n- Create 5 bottom-funnel content pieces targeting \"real estate investor software,\" \"deal analysis tools,\" \"off-market property finder\"\n- Optimize existing pages for unbranded terms: Homepage and /deal-flow should rank for category terms, not just \"Privy\"\n- Target: 100+ unbranded clicks by end of June (would represent 5% diversification from 100% branded dependency)\n\n**Measurement:** Track weekly \"Unassigned\" %, email-sourced deals in HubSpot, and Search Console unbranded click %.",
+    "generated_at": "2026-05-29T18:59:30.358681"
+  }
+]
