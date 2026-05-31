@@ -2,13 +2,13 @@
   {
     "month": "2026-05",
     "month_label": "May 2026",
-    "total_sessions": 110603,
-    "total_deals": 367,
-    "total_revenue": 111708.0,
+    "total_sessions": 110752,
+    "total_deals": 368,
+    "total_revenue": 112639.0,
     "top_channel": "Direct",
     "top_deal_source": "Organic Search",
-    "sc_total_clicks": 1815,
-    "sc_branded_clicks": 1815,
+    "sc_total_clicks": 1868,
+    "sc_branded_clicks": 1868,
     "sc_unbranded_clicks": 0,
     "top_queries": [
       "privy",
@@ -19,16 +19,16 @@
     ],
     "source_breakdown": {
       "Organic Search": {
-        "count": 253,
-        "amount": 71277.0
+        "count": 254,
+        "amount": 72208.0
       },
       "Direct Traffic": {
-        "count": 48,
-        "amount": 18432.0
+        "count": 49,
+        "amount": 19363.0
       },
       "Offline": {
-        "count": 45,
-        "amount": 14500.0
+        "count": 44,
+        "amount": 13569.0
       },
       "Other Campaigns": {
         "count": 6,
@@ -51,7 +51,7 @@
         "amount": 1430.0
       }
     },
-    "ai_summary": "# Attribution Analysis: May 2026\n**Prepared for CEO | Marketing Director**\n\n---\n\n## KEY FINDINGS\n\nWe're closing 355 deals with $111K pipeline, but our attribution infrastructure is fundamentally broken and masking real performance.\n\n**The Good:** Organic Search dominates deal generation (253 deals, $71K pipeline) despite representing only 17% of traffic. These users spend 4m21s on-site with 32% bounce\u2014our highest-quality channel. Referral traffic shows exceptional engagement (8m06s avg, 30% bounce) but converts to only 5 deals, signaling a massive conversion gap.\n\n**The Bad:** 38,298 sessions are \"Unassigned\" (35% of total traffic) with 92% bounce and 16-second sessions\u2014this is junk traffic or tracking failure. Direct traffic (46,155 sessions) shows 67% bounce, suggesting significant dark social or attribution loss from logged-in users. HubSpot reports 0 days to close on all deals, making funnel velocity analysis impossible.\n\n**The Ugly:** We have ZERO unbranded search presence. Every single search click (1,815 total) is branded, meaning we're invisible to investors who don't already know us. We're not in the consideration set\u2014we're just the login page for existing users. 100% brand dependency is an existential growth risk.\n\nIowa delivers 16,618 sessions (15% of total)\u20142x Virginia, our #2 state. This anomaly needs investigation: Are we running geo-targeted campaigns we're not tracking? Is this a single power user or bot? This could be masking true geographic performance.\n\nThe /pricing/ conversion disaster continues: 2,317 sessions across pricing pages, only 26 conversions (1.1% CVR). Compare this to homepage at 0.4% CVR despite 27x more traffic. Pricing pages attract high-intent users but fail to convert them\u2014likely friction in signup flow or value communication breakdown.\n\n---\n\n## RED FLAGS\n\n1. **Attribution blindness at scale:** 35% of traffic is \"Unassigned\" and HubSpot's 0-day close data means we cannot calculate CAC, optimize spend, or understand true source performance.\n\n2. **Email channel dormant:** 2,471 email sessions but only 1 deal YTD. The 91-contact survey cohort remains untapped\u2014we're sitting on qualified leads while paying to acquire new traffic.\n\n3. **No organic discovery engine:** 100% branded search means zero top-of-funnel inbound. We're entirely dependent on paid acquisition, word-of-mouth, and existing brand awareness. Growth ceiling is immediate.\n\n---\n\n## TOP 3 ACTIONS THIS MONTH\n\n**1. FIX ATTRIBUTION INFRASTRUCTURE (Week 1)**\n- Audit \"Unassigned\" traffic source: Verify GA4 tracking on all pages, check for stripping parameters in redirects\n- Force HubSpot deal creation date fix: Require sales team to backfill accurate close dates for Q2 deals or implement automated timestamp capture\n- Implement UTM governance: No campaign launches without proper tagging; audit all active referral partnerships for tracking\n\n**2. ACTIVATE EMAIL COHORT (Week 1-2)**\n- Deploy targeted campaign to 91-survey respondents with personalized deal-flow value prop\n- A/B test: Case study email vs. feature highlight vs. direct sales outreach\n- Target: 15 deals from this cohort by June 15 (16% conversion would match organic search quality)\n\n**3. BUILD UNBRANDED SEARCH PRESENCE (Week 2-4)**\n- Create 5 bottom-funnel content pieces targeting \"real estate investor software,\" \"deal analysis tools,\" \"off-market property finder\"\n- Optimize existing pages for unbranded terms: Homepage and /deal-flow should rank for category terms, not just \"Privy\"\n- Target: 100+ unbranded clicks by end of June (would represent 5% diversification from 100% branded dependency)\n\n**Measurement:** Track weekly \"Unassigned\" %, email-sourced deals in HubSpot, and Search Console unbranded click %.",
-    "generated_at": "2026-05-29T18:59:30.358681"
+    "ai_summary": "# Attribution & Performance Analysis: May 2026\n\n## Key Findings\n\nWe have a $112K pipeline from 368 deals, but **we're flying blind on 35% of our traffic and can't measure true acquisition costs**. The Unassigned traffic (38,279 sessions) has a catastrophic 92% bounce rate and 15-second engagement\u2014this is bot traffic, misconfigured tracking, or app login bleed-through that wasn't properly filtered. \n\nOrganic Search is our deal engine: **254 deals generating $72K pipeline (69% of total value)**, but it's 100% branded traffic. We have zero unbranded search presence, meaning we're invisible to investors who don't already know we exist. We're winning branded searches (position 1.2 for \"privy real estate\") but missing the entire top-of-funnel opportunity.\n\n**Iowa delivers 16,629 sessions (15% of all traffic)\u201470% more than California**. This is either a major customer concentration, a data center/VPN artifact, or a partnership driving traffic we're not tracking. Virginia (#2) and the 8,282 \"(not set)\" sessions suggest continued geo-tagging issues.\n\nOur pricing pages are a black hole: /pricing/ converts at 1.1% (26 deals from 2,323 sessions), but /pricing-deal-flow and /pricing-deal-stream-v2 combine for 5,782 sessions with **zero conversions**. Users are researching pricing but abandoning at different product-specific pages.\n\nEmail Marketing shows 1 deal YTD despite having a primed 91-contact survey cohort\u2014we're sitting on engaged users and not converting them.\n\n## Red Flags\n\n**HubSpot's 0-day close window remains unfixed**, making CAC calculation impossible and preventing optimization of any paid efforts. This was flagged last month\u2014if it wasn't addressed, we're still making blind budget decisions.\n\n**Direct traffic at 46,208 sessions (42%) with 67% bounce** suggests broken UTM parameters, dark social, or iOS privacy features stripping attribution. This isn't real direct traffic at this scale.\n\n**Product-specific pricing pages have 0% conversion** while the main /pricing/ page works. Either the pages lack clear CTAs, serve different user intents, or have technical conversion tracking issues.\n\nThe **91-contact email survey cohort has produced 1 deal**. We collected intent data and aren't activating it\u2014classic marketing waste.\n\n## Top 3 Actions This Month\n\n**1. Fix HubSpot attribution window immediately** (CEO-level priority). Mandate RevOps/marketing to implement proper deal close date tracking this week. Without this, we cannot calculate CAC, cannot justify any paid spend, and cannot prove marketing ROI. This blocks strategic decision-making.\n\n**2. Deploy unbranded SEO content sprint.** We have zero unbranded search visibility\u2014create 8-10 high-intent pages targeting \"real estate investor software,\" \"investment property analysis tools,\" \"off-market deal finding\" within 30 days. Organic Search drives 69% of pipeline value; we're leaving massive acquisition opportunity on the table by only capturing branded demand.\n\n**3. Launch email nurture campaign for the 91-contact survey cohort this week.** Use their survey responses to segment by pain point, send personalized 3-email sequence highlighting relevant features, include calendar booking for demo. This is warm, qualified traffic costing us $0 to convert\u2014execute before they go cold.",
+    "generated_at": "2026-05-30T18:09:11.606174"
   }
 ]
