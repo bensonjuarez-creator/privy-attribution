@@ -1,60 +1,5 @@
 [
   {
-    "month": "2026-07",
-    "month_label": "July 2026",
-    "total_sessions": 125068,
-    "total_deals": 449,
-    "total_revenue": 138331.0,
-    "top_channel": "Direct",
-    "top_deal_source": "Organic Search",
-    "sc_total_clicks": 3461,
-    "sc_branded_clicks": 3461,
-    "sc_unbranded_clicks": 0,
-    "top_queries": [
-      "privy real estate",
-      "privy",
-      "privy pro",
-      "privy real estate login",
-      "privy login"
-    ],
-    "source_breakdown": {
-      "Organic Search": {
-        "count": 270,
-        "amount": 77752.0
-      },
-      "Direct Traffic": {
-        "count": 95,
-        "amount": 33125.0
-      },
-      "Offline": {
-        "count": 59,
-        "amount": 19410.0
-      },
-      "Paid Search": {
-        "count": 7,
-        "amount": 3497.0
-      },
-      "Other Campaigns": {
-        "count": 7,
-        "amount": 47.0
-      },
-      "Referrals": {
-        "count": 6,
-        "amount": 2513.0
-      },
-      "Ai Referrals": {
-        "count": 4,
-        "amount": 557.0
-      },
-      "Email Marketing": {
-        "count": 1,
-        "amount": 1430.0
-      }
-    },
-    "ai_summary": "# PRIVY ATTRIBUTION ANALYSIS: JULY 2026\n\n## KEY FINDINGS\n\nWe're up 13% in sessions (125K vs 111K in May) and 22% in deals (449 vs 368), with pipeline growing to $138K from $113K. That's solid growth, but we're leaving money on the table.\n\nOrganic Search continues to dominate deal creation with 270 deals (60% of total) worth $78K despite representing only 18% of traffic. The efficiency gap is stark: Organic Search converts at 31% bounce rate with 4m19s engagement, while Direct traffic (43% of sessions) generates only 95 deals at 66% bounce and sub-2-minute engagement. We're driving the wrong traffic mix.\n\nThe Unassigned channel problem has exploded \u2014 39,504 sessions (32% of total traffic) with 92% bounce rate and 19-second engagement. This is pure garbage traffic, likely bot activity or tracking breaks. In May, this wasn't in our top channels. Something changed in June-July.\n\nIowa driving 16,891 sessions (13.5% of traffic) is unexplainable unless we have a major customer, partner, or data center there. California and Virginia combined equal Iowa. This screams data quality issue or bot farm.\n\nThe pricing page paradox persists: 6,347 combined sessions to pricing-related pages (5% of total traffic) with microscopic conversion. /pricing/ itself shows 1.0% CVR but /pricing-deal-flow gets 3,611 sessions at 0% conversion. Either tracking is broken or the page is toxic.\n\n## RED FLAGS\n\n**Critical**: HubSpot shows all deals at 0 days to close. This isn't a rounding error \u2014 it's a fundamental attribution break. We can't optimize what we can't measure.\n\n**Urgent**: Email Marketing delivered 1 deal YTD despite being our #2 deal source historically. We have a 91-contact survey cohort sitting idle. At historical conversion rates, that's 15-20 deals we're not creating.\n\n**Problematic**: 100% branded search traffic for the second consecutive month. Zero unbranded clicks means zero top-of-funnel SEO value. We're invisible to investors who don't already know us. Our content and SEO strategy is failing.\n\n**Suspicious**: The Iowa concentration plus 11,178 \"(not set)\" location sessions suggests VPN traffic, bots, or a tracking misconfiguration that's polluting 22% of our data.\n\n## TOP 3 ACTIONS THIS MONTH\n\n**1. FIX THE PIPES (Week 1-2)**: Quarantine Unassigned traffic with UTM audits on all campaigns. Check for tracking script conflicts deployed in June. Install proper bot filtering. Investigate Iowa spike \u2014 validate if it's a legit partner/customer or data pollution. Fix HubSpot time-to-close tracking immediately; we're flying blind on sales velocity.\n\n**2. MONETIZE EXISTING ASSETS (Week 2-3)**: Deploy the 91-contact survey email cohort with a nurture sequence this week. At 60% open rates and conservative 15% conversion, that's 13+ deals worth $4K+ sitting idle. Add exit-intent conversion prompts to /pricing-deal-flow specifically \u2014 3,611 zero-conversion sessions is unacceptable for a high-intent page.\n\n**3. BUILD UNBRANDED DISCOVERY (Month-long)**: Launch 3 cornerstone content pieces targeting \"how to find real estate deals,\" \"off-market property strategies,\" and \"investment property analysis\" \u2014 explicitly to capture unbranded search. Current state (3,461 branded clicks, 0 unbranded) means we're only visible to existing brand aware prospects. Allocate content budget here immediately.",
-    "generated_at": "2026-07-11T15:15:27.051392"
-  },
-  {
     "month": "2026-05",
     "month_label": "May 2026",
     "report_start": "2026-05-01",
@@ -92,7 +37,7 @@
         "amount": 931.0
       }
     },
-    "ai_summary": "# PRIVY MARKETING ATTRIBUTION | MAY 2026 EXECUTIVE SUMMARY\n\n## KEY FINDINGS\n\nWe're in serious decline. May sessions collapsed to **10,139** \u2014 down 91% from May's historical baseline of 110,752 and down 92% from July's 125,068. Deals dropped to **70** (vs. 368 in May baseline, 449 in July), and pipeline shrank to **$34,302** (vs. $112K-138K historically). This isn't a trend \u2014 this is a data catastrophe or a business emergency.\n\n**What's working:** The conversion machinery still functions when traffic arrives. Organic Search maintains its 27% bounce rate with 3m57s engagement. Direct Traffic drove 31 deals ($15K pipeline), Organic Search delivered 24 deals ($12K). The signup flow converts at 105.6% (likely tracking duplicates, but signals strong intent). \n\n**What's broken:** Traffic acquisition is dead. Search Console shows 1,143 clicks vs. 1,868 in the historical May data \u2014 a 39% decline in an already 100% branded search profile. We've generated **zero unbranded clicks** for the third consecutive month. Email drove 157 sessions but zero deals despite having a 91-contact survey cohort ready. The /pricing/ page (330 sessions, 0 conversions) is a blackhole. Regional data shows \"(not set)\" as #1 location (2,547 sessions) \u2014 our tracking is fundamentally compromised.\n\n## RED FLAGS\n\n**Critical data integrity issues:** HubSpot shows 0 days-to-close across all deals. Iowa dominated historical traffic \"by a large margin\" but doesn't appear in May's top 5 regions. GA4's \"(not set)\" location represents 25% of all traffic. These aren't minor gaps \u2014 they indicate our attribution system cannot be trusted for decision-making.\n\n**Zero top-of-funnel growth:** Three months of 100% branded search traffic means we have no organic discovery engine. We're invisible to investors who don't already know us. This explains the traffic collapse \u2014 we're burning through brand awareness with no replenishment.\n\n**Conversion point failures:** The /investors/ page (773 sessions, 0 conversions) and /pricing/ page represent 11% of all traffic with zero monetization. Meanwhile, authenticated pages (/users/sign_in, /dashboard) convert at 43-106%, proving the issue is pre-signup messaging, not product interest.\n\n## TOP 3 ACTIONS THIS MONTH\n\n**1. Emergency attribution audit (Week 1):** Fix the tracking foundation before making any strategic pivots. Resolve HubSpot's 0-day-to-close bug, diagnose GA4's location tracking failure, and establish baseline data quality standards. We cannot optimize what we cannot measure accurately. Allocate engineering resources immediately.\n\n**2. Launch unbranded content offensive (Week 1-2):** Create 10 investor-problem-focused pages targeting \"how to analyze rental property returns,\" \"fix and flip calculator,\" \"real estate comps tool.\" We need unbranded search traffic to survive beyond our current customer base. Set goal: 100 unbranded clicks by June 30.\n\n**3. Pricing page conversion intervention (Week 2-3):** A/B test radical simplification: one CTA, one primary plan, testimonials from investors (not features lists). Current 0% conversion on 330 sessions is unacceptable. Test social proof, risk reversal (free trial emphasis), and competitor comparison table. Target: 2% conversion rate (7 deals/month).\n\n**Hold:** Do not increase ad spend until tracking is fixed. Do not blame \"seasonality\" \u2014 this magnitude of decline signals structural failure.",
-    "generated_at": "2026-07-11T16:01:16.559061"
+    "ai_summary": "# Attribution Analysis: May 2026\n**Privy Marketing Performance Review**\n\n---\n\n## Key Findings\n\nWe drove 10,139 sessions and closed 67 deals worth $34K in May. The data reveals a pure demand-capture machine\u2014zero demand generation happening. \n\n**Traffic is 100% branded.** Every single organic search click (1,143 total) is someone already looking for Privy. We're not appearing for investor searches, market analysis queries, or property evaluation terms. We own position 1.0 for \"privy real estate\" and \"privy pro\" but that's where the SEO story ends.\n\n**Direct traffic dominates (59% of sessions) but performs terribly.** 5,953 direct sessions delivered 67% bounce rate and just 2m36s engagement\u2014these visitors land and leave. Meanwhile, Email (157 sessions, 7m34s engagement, 33% bounce) and Referral (576 sessions, 6m54s engagement, 35% bounce) punch way above their weight but represent only 7% of total traffic combined.\n\n**Attribution tells a different story than traffic.** Direct Traffic claims 31 deals ($15K), Organic Search 24 deals ($12K), but given 100% branded search, we're likely seeing last-click attribution masking earlier touchpoints. The 14 \"Offline\" deals ($6K) suggest phone/sales conversations closing business, but we have zero visibility into what drove those conversations.\n\n**Conversion data is broken or deliberately excluded.** The /users/sign_in page shows 105.6% CVR (190 conversions from 180 sessions) and /dashboard shows 43.1% CVR\u2014these are gated pages, not conversion points. The 4 conversions on homepage (0.1% CVR) from 4,428 sessions is the only legitimate data point, and it's abysmal.\n\n---\n\n## Red Flags\n\n**\"(not set)\" and \"Unassigned\" account for 2,936 sessions (29% of traffic).** This isn't a rounding error\u2014it's nearly a third of our data. The Unassigned channel shows 80% bounce and 1m18s engagement, suggesting bot traffic or tracking failures. We're making decisions on corrupted data.\n\n**The pricing page is a black hole.** 330 sessions, 0 conversions tracked, no follow-up in email or retargeting visible in this data. This is your high-intent page\u2014people researching cost\u2014and we're letting them ghost.\n\n**Email Marketing generated zero deals despite having infrastructure.** You have 157 email sessions with elite engagement metrics (7m34s, 33% bounce) but HubSpot attributes zero pipeline to email. Either attribution windows are too short, email isn't linked to deals, or we're not sending email that drives action.\n\n**Days-to-close shows \"0\" across all deals.** This either means deals are created and closed same-day (unlikely for B2B software) or HubSpot deal hygiene is broken. Without accurate velocity data, we can't forecast, can't optimize nurture timing, and can't identify what actually accelerates deals.\n\n---\n\n## Top 3 Actions This Month\n\n**1. Launch unbranded SEO content immediately.** Create 5 high-authority pages targeting \"how to analyze real estate deals,\" \"investment property calculator,\" \"rental property ROI analysis.\" These should lead to Privy as the solution. Current state: we're invisible until someone knows our name.\n\n**2. Instrument the pricing page funnel.** Add exit-intent email capture, implement scroll tracking to see where drop-off happens, and launch a 3-email nurture for pricing page visitors who don't convert. Track these as a cohort in HubSpot. This is low-hanging fruit\u2014high intent, zero follow-through.\n\n**3. Fix attribution and deal data quality.** Require \"Deal Created Date\" and \"Deal Closed Date\" on all opportunities. Implement multi-touch attribution in HubSpot to track email, content, and referral assists\u2014not just last click. Tag the 91-contact survey cohort and deploy outreach this month to test email\u2192deal attribution.",
+    "generated_at": "2026-07-11T16:05:29.533593"
   }
 ]
