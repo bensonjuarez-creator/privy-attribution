@@ -1,50 +1,5 @@
 [
   {
-    "month": "2026-06",
-    "month_label": "June 2026",
-    "report_start": "2026-06-01",
-    "report_end": "2026-06-30",
-    "total_sessions": 11019,
-    "total_deals": 61,
-    "total_revenue": 19777.0,
-    "top_channel": "Direct",
-    "top_deal_source": "Direct Traffic",
-    "sc_total_clicks": 1216,
-    "sc_branded_clicks": 1216,
-    "sc_unbranded_clicks": 0,
-    "top_queries": [
-      "privy real estate",
-      "privy",
-      "privy pro",
-      "privy real estate login",
-      "privy login"
-    ],
-    "source_breakdown": {
-      "Direct Traffic": {
-        "count": 35,
-        "amount": 9619.0
-      },
-      "Organic Search": {
-        "count": 13,
-        "amount": 4419.0
-      },
-      "Offline": {
-        "count": 11,
-        "amount": 5493.0
-      },
-      "Paid Search": {
-        "count": 1,
-        "amount": 97.0
-      },
-      "Referrals": {
-        "count": 1,
-        "amount": 149.0
-      }
-    },
-    "ai_summary": "# MONTHLY ATTRIBUTION REPORT \u2013 JUNE 2026\n\n## KEY FINDINGS\n\nTraffic grew 8.7% MoM (11,019 vs 10,139 sessions), but **pipeline collapsed 42%** ($19,777 vs $34,302) and deals dropped 13% (61 vs 70). We converted fewer visitors into revenue despite higher volume\u2014a clear efficiency problem.\n\nDirect traffic still dominates at 58% of sessions but shows severe engagement issues: **71% bounce rate, 1m40s session duration**. This screams bot traffic or misattributed sessions. Meanwhile, Organic Search (27% of traffic) demonstrates real intent: 32% bounce, 4m05s engagement, and delivered 13 deals worth $4,419. Referral traffic, though small (568 sessions), shows exceptional quality: 24% bounce, 5m35s duration\u2014but only 1 deal. We're not capitalizing on warm introductions.\n\nSearch Console reveals a **critical organic growth failure**: 1,216 clicks, 100% branded (vs 100% in May). We have zero unbranded visibility. Every search visitor already knows Privy exists. We're capturing demand, not creating it. The top non-branded opportunity doesn't exist in our data\u2014we're invisible to investors searching for \"real estate comps,\" \"fix and flip software,\" or \"investment property analysis.\"\n\nThe /pricing/ page mystery deepens: 278 sessions, **0 conversions, 0 deals**. Either our pricing turns people away, the page has tracking issues, or visitors who land there aren't qualified. The 0.2% homepage conversion rate (12 conversions from 5,373 sessions) suggests massive leakage in our acquisition-to-conversion funnel.\n\nHubSpot data integrity is compromised: all deals show 0 days to close and \"Closed Won\" status. This makes pipeline velocity analysis impossible and suggests deals are being manually backdated or improperly staged.\n\n## RED FLAGS\n\n**Pipeline quality deterioration**: Average deal value dropped to $324 (vs $490 in May)\u2014a 34% decline. Direct Traffic deals fell to $275 average while Offline sources jumped to $499. This inversion suggests our digital channels are attracting lower-value customers or we're closing smaller deals faster to hit volume targets.\n\n**The \"(not set)\" region shows 2,256 sessions**\u201420% of total traffic with no geographic data. Combined with Iowa anomalies from prior months, this indicates persistent tracking failures or significant bot contamination inflating our metrics while depressing our conversion rates.\n\n**Email marketing generated zero deals** despite 236 sessions and 33% bounce rate. With a 91-contact survey cohort sitting unused, we're leaving qualified pipeline on the table. Email should be our highest-intent channel.\n\n## TOP 3 ACTIONS THIS MONTH\n\n**1. Emergency Direct Traffic Audit (Week 1)**: Implement UTM parameters on all owned properties, newsletter links, and product emails. Install bot detection (Cloudflare/DataDome). Separate app.privy.pro traffic entirely from marketing analytics. Goal: reduce Direct attribution from 58% to <30% and expose true source performance.\n\n**2. Launch Unbranded SEO Content Play (Start Week 2)**: Create 8 bottom-funnel content pieces targeting \"comparative market analysis tools,\" \"real estate investment calculator,\" \"fix and flip analysis software.\" Target 200 unbranded clicks by July 31. Current 0% unbranded traffic is unsustainable\u2014we're entirely dependent on existing brand awareness.\n\n**3. Pricing Page Conversion Intervention (Week 2)**: A/B test pricing page with: (a) lead capture form before pricing reveal, (b) ROI calculator showing deal savings, (c) calendar booking CTA. Deploy heatmaps and session recordings. If no lift in 2 weeks, remove pricing from nav and gate it behind email signup. The 278-session, 0-conversion rate is killing pipeline.",
-    "generated_at": "2026-07-11T16:09:58.515654"
-  },
-  {
     "month": "2026-05",
     "month_label": "May 2026",
     "report_start": "2026-05-01",
@@ -1154,6 +1109,1137 @@
         "source": "DIRECT_TRAFFIC",
         "closed": "2026-05-14",
         "created": "2026-05-14",
+        "ttc": 0
+      }
+    ]
+  },
+  {
+    "month": "2026-06",
+    "month_label": "June 2026",
+    "report_start": "2026-06-01",
+    "report_end": "2026-06-30",
+    "total_sessions": 11019,
+    "total_deals": 61,
+    "total_revenue": 19777.0,
+    "top_channel": "Direct",
+    "top_deal_source": "Direct Traffic",
+    "sc_total_clicks": 1216,
+    "sc_branded_clicks": 1216,
+    "sc_unbranded_clicks": 0,
+    "top_queries": [
+      "privy real estate",
+      "privy",
+      "privy pro",
+      "privy real estate login",
+      "privy login"
+    ],
+    "source_breakdown": {
+      "Direct Traffic": {
+        "count": 35,
+        "amount": 9619.0
+      },
+      "Organic Search": {
+        "count": 13,
+        "amount": 4419.0
+      },
+      "Offline": {
+        "count": 11,
+        "amount": 5493.0
+      },
+      "Paid Search": {
+        "count": 1,
+        "amount": 97.0
+      },
+      "Referrals": {
+        "count": 1,
+        "amount": 149.0
+      }
+    },
+    "ai_summary": "# Attribution Report: June 2026\n\n## Key Findings\n\nJune performance declined across core metrics. Deals dropped 13% (70 \u2192 61) while pipeline value cratered 42% ($34,302 \u2192 $19,777). Sessions grew 9% (10,139 \u2192 11,019), but quality deteriorated significantly\u2014we're converting worse traffic at lower values.\n\nDirect Traffic still dominates attribution (35 deals, 57% of total), but average deal value collapsed from $490 in May to $324 in June. Organic Search contributed 13 deals at $340 average\u2014better than Direct but still down from prior performance. The real story: we closed 11 \"Offline\" deals worth $5,493 that our systems can't properly attribute. That's 18% of June revenue in a black box.\n\nEngagement data exposes a critical problem. Direct traffic maintains a 71% bounce rate with 1m40s sessions\u2014people landing on our homepage and leaving immediately. Meanwhile, Organic Search (32% bounce, 4m05s sessions) and Referral (24% bounce, 5m35s sessions) show 2-3x better engagement but represent fraction of volume. We're optimizing for the wrong channel.\n\nThe branded search stranglehold continues: 1,216 clicks, 100% branded, 0% unbranded for the second consecutive month. We have zero organic discovery happening. People who already know Privy can find us; everyone else can't.\n\n## Red Flags\n\n**Data integrity is compromised.** HubSpot shows 0 days to close on all 61 deals\u2014impossible. The \"(not set)\" region jumped to #1 with 2,256 sessions (20% of traffic), up from negligible levels. Without clean attribution, we're making million-dollar decisions on garbage data. This needs immediate remediation.\n\n**The pricing page is a conversion black hole.** 278 sessions, 0 conversions, 0.0% CVR. Users are actively seeking pricing information and we're giving them nothing actionable. This is a 25% month-over-month increase in traffic (from ~220 in May) hitting a dead end.\n\n**Email marketing remains dormant.** Zero deals attributed despite having 91 qualified survey contacts ready to deploy. That's a pre-built nurture segment sitting unused while we watch pipeline decline 42%.\n\n## Top 3 Actions This Month\n\n**1. Fix attribution infrastructure by July 15.** Direct revenue impact: The 11 \"Offline\" deals ($5,493) and \"not set\" traffic (2,256 sessions) represent at minimum 18% of revenue we can't optimize. Assign engineering to resolve HubSpot \"0 days to close\" bug and GA4 region/source tracking. Without this, every subsequent decision is built on sand.\n\n**2. Rebuild the /pricing/ page by July 22.** Test transparent pricing with conversion-optimized CTA (demo request or trial signup). Current 0.0% CVR on 278 sessions is leaving 5-10 deals on the table monthly based on Organic Search benchmarks (1-2% CVR). Even a conservative 1.5% CVR yields 4 additional deals at ~$1,300 monthly recurring value.\n\n**3. Deploy email nurture to the 91-contact survey cohort by July 8.** Three-touch sequence: (1) survey insights + customer story, (2) ROI calculator + pricing transparency, (3) limited-time trial offer. Email's 33% bounce rate and 4m39s engagement prove the channel works\u2014we're just not using it. Conservative target: 3 deals at $300+ average from this single campaign.",
+    "generated_at": "2026-07-11T23:06:58.250222",
+    "ga4_sessions": [
+      {
+        "channel": "Direct",
+        "sessions": 6419,
+        "conversions": 574
+      },
+      {
+        "channel": "Organic Search",
+        "sessions": 2918,
+        "conversions": 36
+      },
+      {
+        "channel": "Unassigned",
+        "sessions": 655,
+        "conversions": 12
+      },
+      {
+        "channel": "Referral",
+        "sessions": 568,
+        "conversions": 30
+      },
+      {
+        "channel": "Email",
+        "sessions": 236,
+        "conversions": 2
+      },
+      {
+        "channel": "AI Assistant",
+        "sessions": 66,
+        "conversions": 0
+      },
+      {
+        "channel": "Paid Search",
+        "sessions": 59,
+        "conversions": 0
+      },
+      {
+        "channel": "Organic Video",
+        "sessions": 57,
+        "conversions": 0
+      },
+      {
+        "channel": "Organic Social",
+        "sessions": 41,
+        "conversions": 0
+      }
+    ],
+    "ga4_trend": [
+      {
+        "date": "06/01",
+        "sessions": 361
+      },
+      {
+        "date": "06/02",
+        "sessions": 341
+      },
+      {
+        "date": "06/03",
+        "sessions": 318
+      },
+      {
+        "date": "06/04",
+        "sessions": 308
+      },
+      {
+        "date": "06/05",
+        "sessions": 305
+      },
+      {
+        "date": "06/06",
+        "sessions": 213
+      },
+      {
+        "date": "06/07",
+        "sessions": 194
+      },
+      {
+        "date": "06/08",
+        "sessions": 347
+      },
+      {
+        "date": "06/09",
+        "sessions": 327
+      },
+      {
+        "date": "06/10",
+        "sessions": 309
+      },
+      {
+        "date": "06/11",
+        "sessions": 305
+      },
+      {
+        "date": "06/12",
+        "sessions": 305
+      },
+      {
+        "date": "06/13",
+        "sessions": 226
+      },
+      {
+        "date": "06/14",
+        "sessions": 234
+      },
+      {
+        "date": "06/15",
+        "sessions": 350
+      },
+      {
+        "date": "06/16",
+        "sessions": 355
+      },
+      {
+        "date": "06/17",
+        "sessions": 426
+      },
+      {
+        "date": "06/18",
+        "sessions": 503
+      },
+      {
+        "date": "06/19",
+        "sessions": 558
+      },
+      {
+        "date": "06/20",
+        "sessions": 414
+      },
+      {
+        "date": "06/21",
+        "sessions": 353
+      },
+      {
+        "date": "06/22",
+        "sessions": 518
+      },
+      {
+        "date": "06/23",
+        "sessions": 325
+      },
+      {
+        "date": "06/24",
+        "sessions": 300
+      },
+      {
+        "date": "06/25",
+        "sessions": 393
+      },
+      {
+        "date": "06/26",
+        "sessions": 337
+      },
+      {
+        "date": "06/27",
+        "sessions": 439
+      },
+      {
+        "date": "06/28",
+        "sessions": 375
+      },
+      {
+        "date": "06/29",
+        "sessions": 537
+      },
+      {
+        "date": "06/30",
+        "sessions": 474
+      }
+    ],
+    "ga4_pages": [
+      {
+        "page": "/",
+        "sessions": 5373,
+        "conversions": 12
+      },
+      {
+        "page": "/investors/",
+        "sessions": 783,
+        "conversions": 0
+      },
+      {
+        "page": "/en/",
+        "sessions": 545,
+        "conversions": 2
+      },
+      {
+        "page": "(not set)",
+        "sessions": 405,
+        "conversions": 0
+      },
+      {
+        "page": "/users/sign_in",
+        "sessions": 302,
+        "conversions": 576
+      },
+      {
+        "page": "/pricing/",
+        "sessions": 278,
+        "conversions": 0
+      },
+      {
+        "page": "/agents-page/",
+        "sessions": 158,
+        "conversions": 0
+      },
+      {
+        "page": "/markets/",
+        "sessions": 58,
+        "conversions": 0
+      },
+      {
+        "page": "/about/",
+        "sessions": 48,
+        "conversions": 0
+      },
+      {
+        "page": "/dashboard",
+        "sessions": 48,
+        "conversions": 16
+      },
+      {
+        "page": "/terms-of-service/",
+        "sessions": 31,
+        "conversions": 0
+      },
+      {
+        "page": "/privacy-policy/",
+        "sessions": 29,
+        "conversions": 0
+      },
+      {
+        "page": "/privypro/en/articles/8927985-investor-lesson-1-market-analysis-and-investor-act",
+        "sessions": 28,
+        "conversions": 0
+      },
+      {
+        "page": "/en/articles/9899157-what-is-privy",
+        "sessions": 25,
+        "conversions": 0
+      },
+      {
+        "page": "/mls/ntreis-north-texas-real-estate-information-services/",
+        "sessions": 25,
+        "conversions": 0
+      }
+    ],
+    "ga4_geo": [
+      {
+        "region": "(not set)",
+        "sessions": 2256
+      },
+      {
+        "region": "California",
+        "sessions": 929
+      },
+      {
+        "region": "Texas",
+        "sessions": 662
+      },
+      {
+        "region": "Florida",
+        "sessions": 647
+      },
+      {
+        "region": "Colorado",
+        "sessions": 484
+      },
+      {
+        "region": "Oregon",
+        "sessions": 436
+      },
+      {
+        "region": "Virginia",
+        "sessions": 340
+      },
+      {
+        "region": "New York",
+        "sessions": 282
+      },
+      {
+        "region": "Illinois",
+        "sessions": 244
+      },
+      {
+        "region": "Georgia",
+        "sessions": 184
+      }
+    ],
+    "ga4_devices": [
+      {
+        "device": "Desktop",
+        "sessions": 8812
+      },
+      {
+        "device": "Mobile",
+        "sessions": 1766
+      },
+      {
+        "device": "Tablet",
+        "sessions": 52
+      },
+      {
+        "device": "Smart Tv",
+        "sessions": 1
+      }
+    ],
+    "ga4_new_returning": [
+      {
+        "type": "New",
+        "sessions": 7072
+      },
+      {
+        "type": "Returning",
+        "sessions": 3309
+      },
+      {
+        "type": "(Not Set)",
+        "sessions": 477
+      }
+    ],
+    "ga4_engagement": [
+      {
+        "channel": "Direct",
+        "sessions": 6419,
+        "bounce_rate": 71.3039414238978,
+        "avg_duration": 100.71532377005764
+      },
+      {
+        "channel": "Organic Search",
+        "sessions": 2918,
+        "bounce_rate": 31.836874571624403,
+        "avg_duration": 245.93186930877314
+      },
+      {
+        "channel": "Unassigned",
+        "sessions": 655,
+        "bounce_rate": 83.81679389312977,
+        "avg_duration": 138.584542859542
+      },
+      {
+        "channel": "Referral",
+        "sessions": 568,
+        "bounce_rate": 24.295774647887324,
+        "avg_duration": 335.4605969419014
+      },
+      {
+        "channel": "Email",
+        "sessions": 236,
+        "bounce_rate": 33.05084745762712,
+        "avg_duration": 279.63758310593226
+      },
+      {
+        "channel": "AI Assistant",
+        "sessions": 66,
+        "bounce_rate": 53.03030303030303,
+        "avg_duration": 183.3159937727273
+      },
+      {
+        "channel": "Paid Search",
+        "sessions": 59,
+        "bounce_rate": 45.76271186440678,
+        "avg_duration": 114.0159029322034
+      },
+      {
+        "channel": "Organic Video",
+        "sessions": 57,
+        "bounce_rate": 24.561403508771928,
+        "avg_duration": 334.9782273859649
+      },
+      {
+        "channel": "Organic Social",
+        "sessions": 41,
+        "bounce_rate": 29.268292682926827,
+        "avg_duration": 96.44028558536586
+      }
+    ],
+    "source_summary": [
+      {
+        "source": "Direct Traffic",
+        "count": 35,
+        "amount": 9619.0,
+        "win_rate": 100.0,
+        "avg_ttc": 0.0
+      },
+      {
+        "source": "Organic Search",
+        "count": 13,
+        "amount": 4419.0,
+        "win_rate": 100.0,
+        "avg_ttc": 0.0
+      },
+      {
+        "source": "Offline",
+        "count": 11,
+        "amount": 5493.0,
+        "win_rate": 100.0,
+        "avg_ttc": 0.0
+      },
+      {
+        "source": "Paid Search",
+        "count": 1,
+        "amount": 97.0,
+        "win_rate": 100.0,
+        "avg_ttc": 0.0
+      },
+      {
+        "source": "Referrals",
+        "count": 1,
+        "amount": 149.0,
+        "win_rate": 100.0,
+        "avg_ttc": 0.0
+      }
+    ],
+    "stage_summary": [
+      {
+        "stage": "Closed Won",
+        "count": 61,
+        "amount": 19777.0
+      }
+    ],
+    "sc_queries": [
+      {
+        "query": "privy real estate",
+        "clicks": 371,
+        "impressions": 523,
+        "ctr": 70.93690248565966,
+        "position": 1.0
+      },
+      {
+        "query": "privy",
+        "clicks": 288,
+        "impressions": 37365,
+        "ctr": 0.7707747892412685,
+        "position": 5.8972300281011645
+      },
+      {
+        "query": "privy pro",
+        "clicks": 138,
+        "impressions": 284,
+        "ctr": 48.59154929577465,
+        "position": 1.7746478873239435
+      },
+      {
+        "query": "privy real estate login",
+        "clicks": 68,
+        "impressions": 75,
+        "ctr": 90.66666666666666,
+        "position": 1.0
+      },
+      {
+        "query": "privy login",
+        "clicks": 53,
+        "impressions": 1757,
+        "ctr": 3.016505406943654,
+        "position": 6.922026180990325
+      },
+      {
+        "query": "privypro",
+        "clicks": 40,
+        "impressions": 47,
+        "ctr": 85.1063829787234,
+        "position": 1.0
+      },
+      {
+        "query": "getprivy",
+        "clicks": 37,
+        "impressions": 49,
+        "ctr": 75.51020408163265,
+        "position": 1.0
+      },
+      {
+        "query": "privy log in",
+        "clicks": 36,
+        "impressions": 115,
+        "ctr": 31.30434782608696,
+        "position": 7.260869565217392
+      },
+      {
+        "query": "privy pro login",
+        "clicks": 27,
+        "impressions": 28,
+        "ctr": 96.42857142857143,
+        "position": 1.0
+      },
+      {
+        "query": "privy.pro",
+        "clicks": 24,
+        "impressions": 55,
+        "ctr": 43.63636363636363,
+        "position": 1.0
+      },
+      {
+        "query": "privvy",
+        "clicks": 22,
+        "impressions": 927,
+        "ctr": 2.373247033441208,
+        "position": 7.279395900755124
+      },
+      {
+        "query": "privy real estate software",
+        "clicks": 19,
+        "impressions": 35,
+        "ctr": 54.285714285714285,
+        "position": 1.6
+      },
+      {
+        "query": "start with privy",
+        "clicks": 19,
+        "impressions": 54,
+        "ctr": 35.18518518518518,
+        "position": 1.037037037037037
+      },
+      {
+        "query": "privy software",
+        "clicks": 14,
+        "impressions": 68,
+        "ctr": 20.588235294117645,
+        "position": 16.647058823529413
+      },
+      {
+        "query": "get privy now",
+        "clicks": 13,
+        "impressions": 18,
+        "ctr": 72.22222222222221,
+        "position": 1.0
+      },
+      {
+        "query": "privvy real estate",
+        "clicks": 11,
+        "impressions": 25,
+        "ctr": 44.0,
+        "position": 1.0
+      },
+      {
+        "query": "privy app",
+        "clicks": 11,
+        "impressions": 217,
+        "ctr": 5.0691244239631335,
+        "position": 5.506912442396313
+      },
+      {
+        "query": "privy mls",
+        "clicks": 11,
+        "impressions": 27,
+        "ctr": 40.74074074074074,
+        "position": 1.0
+      },
+      {
+        "query": "app.privy",
+        "clicks": 7,
+        "impressions": 23,
+        "ctr": 30.434782608695656,
+        "position": 4.173913043478261
+      },
+      {
+        "query": "get privy",
+        "clicks": 7,
+        "impressions": 20,
+        "ctr": 35.0,
+        "position": 1.35
+      }
+    ],
+    "sc_pages": [
+      {
+        "page": "https://www.privy.pro/",
+        "clicks": 1268,
+        "impressions": 51960,
+        "ctr": 2.4403387220939186,
+        "position": 6.159622786759045
+      },
+      {
+        "page": "https://app.privy.pro/",
+        "clicks": 252,
+        "impressions": 5576,
+        "ctr": 4.519368723098996,
+        "position": 6.9184002869440455
+      },
+      {
+        "page": "https://app.privy.pro/registration",
+        "clicks": 22,
+        "impressions": 1687,
+        "ctr": 1.3040901007705987,
+        "position": 2.902193242442205
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/8843010-find-off-market-deals-on-privy",
+        "clicks": 17,
+        "impressions": 909,
+        "ctr": 1.87018701870187,
+        "position": 4.116611661166116
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/9899157-what-is-privy",
+        "clicks": 11,
+        "impressions": 2021,
+        "ctr": 0.5442850074220682,
+        "position": 3.1781296387926767
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/8843612-run-comparables-with-privy",
+        "clicks": 6,
+        "impressions": 454,
+        "ctr": 1.3215859030837005,
+        "position": 6.033039647577093
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/10373165-cancel-your-plan",
+        "clicks": 5,
+        "impressions": 216,
+        "ctr": 2.314814814814815,
+        "position": 7.25
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/10530613-is-there-a-free-trial-for-privy",
+        "clicks": 5,
+        "impressions": 739,
+        "ctr": 0.6765899864682002,
+        "position": 5.18403247631935
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/8838844-privy-s-direct-to-mls-markets",
+        "clicks": 5,
+        "impressions": 187,
+        "ctr": 2.6737967914438503,
+        "position": 6.1550802139037435
+      },
+      {
+        "page": "https://learningcenter.privy.pro/en/articles/8843266-update-your-email-address",
+        "clicks": 5,
+        "impressions": 205,
+        "ctr": 2.4390243902439024,
+        "position": 7.131707317073171
+      }
+    ],
+    "deals": [
+      {
+        "name": "Omiel Fairweather  - New Deal",
+        "amount": 1430.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-05",
+        "created": "2026-06-05",
+        "ttc": 0
+      },
+      {
+        "name": "Jacobo Ontiveros  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-01",
+        "created": "2026-06-01",
+        "ttc": 0
+      },
+      {
+        "name": "Tanner Dahl  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-03",
+        "created": "2026-06-03",
+        "ttc": 0
+      },
+      {
+        "name": "eren cem alioglu  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-04",
+        "created": "2026-06-04",
+        "ttc": 0
+      },
+      {
+        "name": "Brent Harrison  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-08",
+        "created": "2026-06-08",
+        "ttc": 0
+      },
+      {
+        "name": "Brent Harrison  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-09",
+        "created": "2026-06-09",
+        "ttc": 0
+      },
+      {
+        "name": "Reginald Hayes  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-08",
+        "created": "2026-06-08",
+        "ttc": 0
+      },
+      {
+        "name": "Brian Shaw  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-09",
+        "created": "2026-06-09",
+        "ttc": 0
+      },
+      {
+        "name": "Griffen Kempskie  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-09",
+        "created": "2026-06-09",
+        "ttc": 0
+      },
+      {
+        "name": "Gary Buttar  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-09",
+        "created": "2026-06-09",
+        "ttc": 0
+      },
+      {
+        "name": "Lorenzo Aytes  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-13",
+        "created": "2026-06-13",
+        "ttc": 0
+      },
+      {
+        "name": "Pedro Diaz  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-13",
+        "created": "2026-06-13",
+        "ttc": 0
+      },
+      {
+        "name": "Sam Diab  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-16",
+        "created": "2026-06-16",
+        "ttc": 0
+      },
+      {
+        "name": "Erin Marzano  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "Zohar Elefant  - New Deal",
+        "amount": 931.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-23",
+        "created": "2026-06-23",
+        "ttc": 0
+      },
+      {
+        "name": "Jennifer Hochmiller  - New Deal",
+        "amount": 299.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-19",
+        "created": "2026-06-19",
+        "ttc": 0
+      },
+      {
+        "name": "Abhiram Bharatham  - New Deal",
+        "amount": 249.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-03",
+        "created": "2026-06-03",
+        "ttc": 0
+      },
+      {
+        "name": "Michael King  - New Deal",
+        "amount": 249.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-15",
+        "created": "2026-06-15",
+        "ttc": 0
+      },
+      {
+        "name": "Mohammad Shahid  - New Deal",
+        "amount": 249.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-19",
+        "created": "2026-06-19",
+        "ttc": 0
+      },
+      {
+        "name": "Mike Marchese  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-01",
+        "created": "2026-06-01",
+        "ttc": 0
+      },
+      {
+        "name": "Tone Burgess  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-10",
+        "created": "2026-06-10",
+        "ttc": 0
+      },
+      {
+        "name": "Richard Davis  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "REFERRALS",
+        "closed": "2026-06-13",
+        "created": "2026-06-13",
+        "ttc": 0
+      },
+      {
+        "name": "Isam Boukattaya  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-14",
+        "created": "2026-06-14",
+        "ttc": 0
+      },
+      {
+        "name": "Cameren Faciane  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-17",
+        "created": "2026-06-17",
+        "ttc": 0
+      },
+      {
+        "name": "Oluwatosin  Sodiq  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "Joe Rojas  - New Deal",
+        "amount": 149.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-23",
+        "created": "2026-06-23",
+        "ttc": 0
+      },
+      {
+        "name": "Simon Little  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-02",
+        "created": "2026-06-02",
+        "ttc": 0
+      },
+      {
+        "name": "Victor wynn  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-03",
+        "created": "2026-06-03",
+        "ttc": 0
+      },
+      {
+        "name": "Benjamin Castillo  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-02",
+        "created": "2026-06-02",
+        "ttc": 0
+      },
+      {
+        "name": "Diego Persico  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-01",
+        "created": "2026-06-01",
+        "ttc": 0
+      },
+      {
+        "name": "Michael Goda  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-05",
+        "created": "2026-06-05",
+        "ttc": 0
+      },
+      {
+        "name": "Matthew Ennis  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-05",
+        "created": "2026-06-05",
+        "ttc": 0
+      },
+      {
+        "name": "Mark Iroha  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-08",
+        "created": "2026-06-08",
+        "ttc": 0
+      },
+      {
+        "name": "LUIS FERNANDEZ ALVAREZ  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-08",
+        "created": "2026-06-08",
+        "ttc": 0
+      },
+      {
+        "name": "Enrique Cardona  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-10",
+        "created": "2026-06-10",
+        "ttc": 0
+      },
+      {
+        "name": "Rooservelt Akume  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "PAID_SEARCH",
+        "closed": "2026-06-09",
+        "created": "2026-06-09",
+        "ttc": 0
+      },
+      {
+        "name": "Hamza Malik  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-10",
+        "created": "2026-06-10",
+        "ttc": 0
+      },
+      {
+        "name": "Steve Porter  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-12",
+        "created": "2026-06-12",
+        "ttc": 0
+      },
+      {
+        "name": "Mark Iroha  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-13",
+        "created": "2026-06-13",
+        "ttc": 0
+      },
+      {
+        "name": "Patrick Carrasco  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-14",
+        "created": "2026-06-14",
+        "ttc": 0
+      },
+      {
+        "name": "Fernando Mares   - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-16",
+        "created": "2026-06-16",
+        "ttc": 0
+      },
+      {
+        "name": "Robert Wood  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-16",
+        "created": "2026-06-16",
+        "ttc": 0
+      },
+      {
+        "name": "Nick Bruce  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-17",
+        "created": "2026-06-17",
+        "ttc": 0
+      },
+      {
+        "name": "Mahamud Ali  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "Bogdan Balanchuk  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "Rosely Wolf  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "William Reed  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-18",
+        "created": "2026-06-18",
+        "ttc": 0
+      },
+      {
+        "name": "Sayuri Sion  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "ORGANIC_SEARCH",
+        "closed": "2026-06-20",
+        "created": "2026-06-20",
+        "ttc": 0
+      },
+      {
+        "name": "Scott Voss  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "OFFLINE",
+        "closed": "2026-06-20",
+        "created": "2026-06-20",
+        "ttc": 0
+      },
+      {
+        "name": "Shawn Seiler  - New Deal",
+        "amount": 97.0,
+        "stage": "240964436",
+        "source": "DIRECT_TRAFFIC",
+        "closed": "2026-06-21",
+        "created": "2026-06-21",
         "ttc": 0
       }
     ]
