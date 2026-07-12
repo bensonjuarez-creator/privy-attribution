@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privy Attribution Dashboard — June 2026</title>
+<title>Privy Attribution Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@5.1.2/marked.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -13,7 +14,6 @@
     --text: #e6e6f0; --muted: #666;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; }
 
   .header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border);
@@ -22,1257 +22,377 @@
   .header-left p { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
   .header-tag { font-size: 0.72rem; color: var(--accent); }
 
+  .tab-bar { background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn { background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); padding: 0.75rem 1.25rem; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: var(--sans); }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
   .main { padding: 1.8rem 2rem; max-width: 1400px; margin: 0 auto; }
 
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
   .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px;
     padding: 1.25rem; position: relative; overflow: hidden; }
-  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
   .stat-card:nth-child(1)::before { background: var(--accent); }
   .stat-card:nth-child(2)::before { background: var(--green); }
   .stat-card:nth-child(3)::before { background: var(--amber); }
   .stat-card:nth-child(4)::before { background: var(--red); }
-  .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
-  .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1.1; }
-  .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; }
+  .stat-label { font-size:0.65rem; font-weight:700; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem; }
+  .stat-value { font-size:1.5rem; font-weight:700; color:var(--text); line-height:1.1; }
+  .stat-sub { font-size:0.72rem; color:var(--muted); margin-top:0.35rem; }
 
-  .section-hdr { font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--muted); margin: 1.8rem 0 0.9rem; }
+  .section-info { display:flex; align-items:center; margin:1.8rem 0 0.9rem; }
+  .section-hdr { font-size:0.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.1em; color:var(--muted); }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1rem; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem; }
 
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
-  .card-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 1rem; }
-  .chart-wrap { position: relative; height: 200px; }
-  .chart-wrap-sm { position: relative; height: 160px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.25rem; }
+  .card-title { font-size:0.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--muted); margin-bottom:1rem; }
+  .chart-wrap { position:relative; height:200px; }
+  .chart-wrap-sm { position:relative; height:160px; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  thead th { font-size: 0.62rem; font-weight: 700; color: var(--muted); text-transform: uppercase;
-    letter-spacing: 0.06em; text-align: left; padding: 0 0.75rem 0.6rem 0;
-    border-bottom: 1px solid var(--border); }
-  tbody td { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--border); color: var(--text); }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+  thead th { font-size:0.62rem; font-weight:700; color:var(--muted); text-transform:uppercase;
+    letter-spacing:0.06em; text-align:left; padding:0 0.75rem 0.6rem 0;
+    border-bottom:1px solid var(--border); }
+  tbody td { padding:0.6rem 0.75rem 0.6rem 0; border-bottom:1px solid var(--border); color:var(--text); }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover td { background:rgba(255,255,255,0.02); }
 
-  .badge { font-size: 0.65rem; color: var(--accent); background: rgba(99,91,255,0.1);
-    border: 1px solid rgba(99,91,255,0.15); padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+  .badge { font-size:0.65rem; color:var(--accent); background:rgba(99,91,255,0.1);
+    border:1px solid rgba(99,91,255,0.15); padding:0.18rem 0.45rem; border-radius:4px; white-space:nowrap; }
 
-  .footer { font-size: 0.7rem; color: var(--muted); margin-top: 1.5rem;
-    padding: 0.75rem 1rem; background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; }
+  .footer { font-size:0.7rem; color:var(--muted); margin-top:1.5rem;
+    padding:0.75rem 1rem; background:var(--card); border:1px solid var(--border); border-radius:8px; }
 
-  .info-wrap { position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-  .info-wrap .card-title { margin-bottom: 0; }
-  .info-btn { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border); color: var(--muted); font-size: 0.6rem; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; cursor: default;
-    flex-shrink: 0; position: relative; }
-  .info-btn:hover .tooltip { opacity: 1; visibility: visible; }
-  .tooltip { position: absolute; right: 0; top: 22px; width: 240px; background: #1e1e2e;
-    border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 0.8rem;
-    font-size: 0.72rem; color: var(--text); line-height: 1.5; z-index: 100;
-    opacity: 0; visibility: hidden; transition: opacity 0.15s; pointer-events: none;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4); font-weight: 400; text-transform: none; letter-spacing: 0; }
-  .section-info { display: flex; align-items: center; gap: 0.5rem; margin: 1.8rem 0 0.9rem; }
-  .section-info .section-hdr { margin: 0; }
-  .section-info .info-btn { margin-left: auto; }
-
-  .ai-summary { font-size: 0.85rem; line-height: 1.8; color: var(--text); }
+  .ai-summary { font-size:0.85rem; line-height:1.8; color:var(--text); }
   .ai-summary h1, .ai-summary h2, .ai-summary h3 {
-    font-size: 0.9rem; font-weight: 700; color: var(--accent);
-    margin: 1rem 0 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .ai-summary p { margin-bottom: 0.6rem; }
-  .ai-summary strong { color: var(--text); font-weight: 700; }
-  .ai-summary ul, .ai-summary ol { padding-left: 1.2rem; margin-bottom: 0.6rem; }
-  .ai-summary li { margin-bottom: 0.3rem; }
+    font-size:0.9rem; font-weight:700; color:var(--accent);
+    margin:1rem 0 0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
+  .ai-summary p { margin-bottom:0.6rem; }
+  .ai-summary strong { color:var(--text); font-weight:700; }
+  .ai-summary ul, .ai-summary ol { padding-left:1.2rem; margin-bottom:0.6rem; }
+  .ai-summary li { margin-bottom:0.3rem; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <h1>Privy Attribution</h1>
-    <p>GA4 + HUBSPOT · JUNE 2026 (EXCLUDING APP.PRIVY.PRO) · GENERATED JULY 11, 2026 AT 04:10 PM</p>
+    <p id="headerSub">Loading...</p>
   </div>
   <div class="header-tag">Monthly Report</div>
 </div>
-
-<div class="main">
-
-  <!-- STAT CARDS -->
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-label">Total Sessions</div>
-      <div class="stat-value">11,019</div>
-      <div class="stat-sub">GA4 · June 2026 · excl. app logins</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Top Channel</div>
-      <div class="stat-value" style="font-size:1.1rem">Direct</div>
-      <div class="stat-sub">6,419 sessions</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Deals This Month</div>
-      <div class="stat-value">61</div>
-      <div class="stat-sub">HubSpot CRM · June 2026</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Pipeline This Month</div>
-      <div class="stat-value">$19,777</div>
-      <div class="stat-sub">June 2026</div>
-    </div>
-  </div>
-
-  <!-- AI SUMMARY -->
-  <div class="section-info">
-    <div class="section-hdr">🤖 AI Analysis · June 2026</div>
-  </div>
-  <div class="card" style="margin-bottom:1rem;border-left:3px solid #635bff">
-    <div class="ai-summary"># MONTHLY ATTRIBUTION REPORT – JUNE 2026
-
-## KEY FINDINGS
-
-Traffic grew 8.7% MoM (11,019 vs 10,139 sessions), but **pipeline collapsed 42%** ($19,777 vs $34,302) and deals dropped 13% (61 vs 70). We converted fewer visitors into revenue despite higher volume—a clear efficiency problem.
-
-Direct traffic still dominates at 58% of sessions but shows severe engagement issues: **71% bounce rate, 1m40s session duration**. This screams bot traffic or misattributed sessions. Meanwhile, Organic Search (27% of traffic) demonstrates real intent: 32% bounce, 4m05s engagement, and delivered 13 deals worth $4,419. Referral traffic, though small (568 sessions), shows exceptional quality: 24% bounce, 5m35s duration—but only 1 deal. We're not capitalizing on warm introductions.
-
-Search Console reveals a **critical organic growth failure**: 1,216 clicks, 100% branded (vs 100% in May). We have zero unbranded visibility. Every search visitor already knows Privy exists. We're capturing demand, not creating it. The top non-branded opportunity doesn't exist in our data—we're invisible to investors searching for "real estate comps," "fix and flip software," or "investment property analysis."
-
-The /pricing/ page mystery deepens: 278 sessions, **0 conversions, 0 deals**. Either our pricing turns people away, the page has tracking issues, or visitors who land there aren't qualified. The 0.2% homepage conversion rate (12 conversions from 5,373 sessions) suggests massive leakage in our acquisition-to-conversion funnel.
-
-HubSpot data integrity is compromised: all deals show 0 days to close and "Closed Won" status. This makes pipeline velocity analysis impossible and suggests deals are being manually backdated or improperly staged.
-
-## RED FLAGS
-
-**Pipeline quality deterioration**: Average deal value dropped to $324 (vs $490 in May)—a 34% decline. Direct Traffic deals fell to $275 average while Offline sources jumped to $499. This inversion suggests our digital channels are attracting lower-value customers or we're closing smaller deals faster to hit volume targets.
-
-**The "(not set)" region shows 2,256 sessions**—20% of total traffic with no geographic data. Combined with Iowa anomalies from prior months, this indicates persistent tracking failures or significant bot contamination inflating our metrics while depressing our conversion rates.
-
-**Email marketing generated zero deals** despite 236 sessions and 33% bounce rate. With a 91-contact survey cohort sitting unused, we're leaving qualified pipeline on the table. Email should be our highest-intent channel.
-
-## TOP 3 ACTIONS THIS MONTH
-
-**1. Emergency Direct Traffic Audit (Week 1)**: Implement UTM parameters on all owned properties, newsletter links, and product emails. Install bot detection (Cloudflare/DataDome). Separate app.privy.pro traffic entirely from marketing analytics. Goal: reduce Direct attribution from 58% to <30% and expose true source performance.
-
-**2. Launch Unbranded SEO Content Play (Start Week 2)**: Create 8 bottom-funnel content pieces targeting "comparative market analysis tools," "real estate investment calculator," "fix and flip analysis software." Target 200 unbranded clicks by July 31. Current 0% unbranded traffic is unsustainable—we're entirely dependent on existing brand awareness.
-
-**3. Pricing Page Conversion Intervention (Week 2)**: A/B test pricing page with: (a) lead capture form before pricing reveal, (b) ROI calculator showing deal savings, (c) calendar booking CTA. Deploy heatmaps and session recordings. If no lift in 2 weeks, remove pricing from nav and gate it behind email signup. The 278-session, 0-conversion rate is killing pipeline.</div>
-  </div>
-
-  <!-- GA4 TRAFFIC -->
-  <div class="section-info">
-    <div class="section-hdr">📈 GA4 Traffic · June 2026</div>
-    <div class="info-btn">i<span class="tooltip">Your site received 11,019 real acquisition sessions in June 2026 after removing app logins. Organic Search (26% of traffic) is driving 35 of your 61 deals — making SEO your highest-ROI channel by far. Direct (58%) is likely a mix of brand awareness and returning prospects. </span></div>
-  </div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Session Trend</div>
-        <div class="info-btn">i<span class="tooltip">Traffic is trending up — the last 7 days of the month averaged 408 sessions/day vs 291 at the start (40% increase). Look for spikes that correlate with marketing activity like email sends or social posts.</span></div>
-      </div>
-      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Sessions by Channel</div>
-        <div class="info-btn">i<span class="tooltip">Direct dominates traffic at 58% but Organic Search closes more deals (35 of 61 this month). This gap means SEO visitors convert at a much higher rate than direct visitors. Every dollar spent improving SEO has outsized deal impact.</span></div>
-      </div>
-      <div class="chart-wrap"><canvas id="channelChart"></canvas></div>
-    </div>
-  </div>
-
-  <!-- AUDIENCE -->
-  <div class="section-info">
-    <div class="section-hdr">👥 Audience Breakdown</div>
-    <div class="info-btn">i<span class="tooltip">Who visited your website in June 2026 — what devices they use, whether they've been before, and where they're located.</span></div>
-  </div>
-  <div class="grid-3">
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Device Breakdown</div>
-        <div class="info-btn">i<span class="tooltip">80% of your visitors are on desktop — expected for a B2B real estate tool. Mobile is 16%. If you ever run consumer-facing campaigns this will shift. Make sure your pricing and demo request pages are fully optimized for desktop.</span></div>
-      </div>
-      <div class="chart-wrap-sm"><canvas id="deviceChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">New vs Returning Visitors</div>
-        <div class="info-btn">i<span class="tooltip">64% of sessions are from new visitors and 30% are returning. High new visitor % is good for top-of-funnel growth but make sure your retargeting is capturing these people before they forget you.</span></div>
-      </div>
-      <div class="chart-wrap-sm"><canvas id="nrChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Top Regions</div>
-        <div class="info-btn">i<span class="tooltip">Your top markets are California, Texas, Florida. Use this to geo-target paid search campaigns — if you ever run Google Ads, bid higher in these states. '(not set)' sessions are from VPN users or privacy browsers and can't be geolocated — not a concern.</span></div>
-      </div>
-      <table>
-        <thead><tr><th>Region</th><th>Sessions</th><th style="width:40%">Share</th></tr></thead>
-        <tbody>
-        <tr>
-          <td>(not set)</td>
-          <td>2,256</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:100%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>California</td>
-          <td>929</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:41%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Texas</td>
-          <td>662</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:29%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Florida</td>
-          <td>647</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:29%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Colorado</td>
-          <td>484</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:21%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Oregon</td>
-          <td>436</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:19%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Virginia</td>
-          <td>340</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:15%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>New York</td>
-          <td>282</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:12%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Illinois</td>
-          <td>244</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:11%"></div>
-          </div></td>
-        </tr>
-        <tr>
-          <td>Georgia</td>
-          <td>184</td>
-          <td><div style="background:#232330;border-radius:4px;height:8px;width:100%">
-            <div style="background:#635bff;height:8px;border-radius:4px;width:8%"></div>
-          </div></td>
-        </tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ENGAGEMENT -->
-  <div class="section-info">
-    <div class="section-hdr">⚡ Engagement by Channel</div>
-    <div class="info-btn">i<span class="tooltip">Referral is your most engaged channel — visitors spend the most time and bounce least.  Organic Search visitors spend 4m 05s on site — they arrive with intent and stay to learn.</span></div>
-  </div>
-  <div class="card" style="margin-bottom:1rem">
-    <div class="info-wrap">
-      <div class="card-title">Bounce Rate &amp; Session Duration by Channel</div>
-      <div class="info-btn">i<span class="tooltip">Organic Search has a 32% bounce rate and 4m 05s avg session — these visitors are genuinely evaluating Privy. Direct has a 71% bounce rate suggesting many direct visits are quick check-ins, not new evaluations.</span></div>
-    </div>
-    <table>
-      <thead><tr><th>Channel</th><th>Sessions</th><th>Bounce Rate</th><th>Avg Duration</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Direct</td>
-          <td>6,419</td>
-          <td>71.3%</td>
-          <td>1m 40s</td>
-        </tr>
-        <tr>
-          <td>Organic Search</td>
-          <td>2,918</td>
-          <td>31.8%</td>
-          <td>4m 05s</td>
-        </tr>
-        <tr>
-          <td>Unassigned</td>
-          <td>655</td>
-          <td>83.8%</td>
-          <td>2m 18s</td>
-        </tr>
-        <tr>
-          <td>Referral</td>
-          <td>568</td>
-          <td>24.3%</td>
-          <td>5m 35s</td>
-        </tr>
-        <tr>
-          <td>Email</td>
-          <td>236</td>
-          <td>33.1%</td>
-          <td>4m 39s</td>
-        </tr>
-        <tr>
-          <td>AI Assistant</td>
-          <td>66</td>
-          <td>53.0%</td>
-          <td>3m 03s</td>
-        </tr>
-        <tr>
-          <td>Paid Search</td>
-          <td>59</td>
-          <td>45.8%</td>
-          <td>1m 54s</td>
-        </tr>
-        <tr>
-          <td>Organic Video</td>
-          <td>57</td>
-          <td>24.6%</td>
-          <td>5m 34s</td>
-        </tr>
-        <tr>
-          <td>Organic Social</td>
-          <td>41</td>
-          <td>29.3%</td>
-          <td>1m 36s</td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <!-- LANDING PAGES -->
-  <div class="section-info">
-    <div class="section-hdr">🏠 Top Landing Pages · June 2026</div>
-    <div class="info-btn">i<span class="tooltip">Your homepage gets 5,373 sessions (49% of all traffic) — it's your most important conversion page. /pricing/ gets 278 sessions with only 0.0% conversion — this is your biggest missed opportunity. People are checking price and leaving. Add a demo CTA or live chat. Pages converting well: /users/sign_in.</span></div>
-  </div>
-  <div class="card" style="margin-bottom:1rem">
-    <div class="info-wrap">
-      <div class="card-title">Pages driving the most traffic · June 2026 (excl. app logins)</div>
-      <div class="info-btn">i<span class="tooltip">Focus on pages with high traffic but low conversion — those are your biggest optimization wins. /pricing/ at 278 sessions and near-zero conversion is the top priority. The 81%+ conversion rate on /users/sign_in is a GA4 data artifact — app logins partially slipping through the filter, not real conversions.</span></div>
-    </div>
-    <table>
-      <thead><tr><th>Page</th><th>Sessions</th><th>Conversions</th><th>Conv Rate</th></tr></thead>
-      <tbody>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/</td>
-          <td>5,373</td>
-          <td>12</td>
-          <td>0.2%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/investors/</td>
-          <td>783</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/en/</td>
-          <td>545</td>
-          <td>2</td>
-          <td>0.4%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">(not set)</td>
-          <td>405</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/users/sign_in</td>
-          <td>302</td>
-          <td>576</td>
-          <td>190.7%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/pricing/</td>
-          <td>278</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/agents-page/</td>
-          <td>158</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/markets/</td>
-          <td>58</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/about/</td>
-          <td>48</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/dashboard</td>
-          <td>48</td>
-          <td>16</td>
-          <td>33.3%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/terms-of-service/</td>
-          <td>31</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/privacy-policy/</td>
-          <td>29</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/privypro/en/articles/8927985-investor-lesson-1-market-analysis-and-investor-act</td>
-          <td>28</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/en/articles/9899157-what-is-privy</td>
-          <td>25</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">/mls/ntreis-north-texas-real-estate-information-services/</td>
-          <td>25</td>
-          <td>0</td>
-          <td>0.0%</td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <!-- HUBSPOT ATTRIBUTION -->
-  <div class="section-info">
-    <div class="section-hdr">💼 HubSpot Attribution · June 2026</div>
-    <div class="info-btn">i<span class="tooltip">Organic Search drove 35 of your 61 deals this month (57%) worth $9,619. Direct Traffic is second at 13 deals — some of these are likely organic search visits that lost their UTM tracking. Offline (sales-driven) deals average higher value — worth tracking which marketing touches happened before those offline closes.</span></div>
-  </div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Deals by Attribution Source</div>
-        <div class="info-btn">i<span class="tooltip">Organic Search is generating 57% of deals but only ~17% of traffic — meaning SEO visitors convert to deals at roughly 4-5x the rate of your average visitor. This is your clearest signal: more SEO content = more deals.</span></div>
-      </div>
-      <div class="chart-wrap"><canvas id="dealChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Deal Stage Funnel</div>
-        <div class="info-btn">i<span class="tooltip">Most deals are sitting in the Closed Won stage (61 deals). Stages with large deal counts are pipeline bottlenecks. Note: all deals showing 0 days to close means HubSpot is recording close date = create date — update deal stages as prospects progress to get accurate funnel velocity data.</span></div>
-      </div>
-      <div class="chart-wrap"><canvas id="stageChart"></canvas></div>
-    </div>
-  </div>
-
-  <!-- SOURCE ANALYSIS -->
-  <div class="section-info">
-    <div class="section-hdr">🔍 Source Deep Dive · Win Rate &amp; Time to Close</div>
-    <div class="info-btn">i<span class="tooltip">Organic Search leads on volume (35 deals, $9,619) while Offline closes the highest-value individual deals. The 100% win rate and 0-day close time across all sources is a HubSpot data issue — deals are being created and closed on the same day. Ask your sales team to update stages and close dates as deals progress.</span></div>
-  </div>
-  <div class="card" style="margin-bottom:1rem">
-    <div class="info-wrap">
-      <div class="card-title">Performance by attribution source</div>
-      <div class="info-btn">i<span class="tooltip">Organic Search = 35 deals, $9,619 pipeline. Offline = 11 deals averaging $499 each — your highest per-deal value channel. Email Marketing has only 0 deals this month — significant underperformance given you have a 91-contact survey cohort ready to go. Send that campaign.</span></div>
-    </div>
-    <table>
-      <thead><tr><th>Source</th><th>Deals</th><th>Pipeline Value</th><th>Win Rate</th><th>Avg Days to Close</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>35</td>
-          <td>$9,619</td>
-          <td>100%</td>
-          <td>0d</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Organic Search</span></td>
-          <td>13</td>
-          <td>$4,419</td>
-          <td>100%</td>
-          <td>0d</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Offline</span></td>
-          <td>11</td>
-          <td>$5,493</td>
-          <td>100%</td>
-          <td>0d</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Paid Search</span></td>
-          <td>1</td>
-          <td>$97</td>
-          <td>100%</td>
-          <td>0d</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Referrals</span></td>
-          <td>1</td>
-          <td>$149</td>
-          <td>100%</td>
-          <td>0d</td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <!-- SEARCH CONSOLE -->
-  <div class="section-info">
-    <div class="section-hdr">🔎 Google Search Console · June 2026</div>
-    <div class="info-btn">i<span class="tooltip">These are the actual Google search terms driving traffic to privy.pro in June 2026 — 1,216 clicks from 41,712 impressions. 95% of clicks are branded (people already know Privy). Only 5% are unbranded — meaning almost all your organic traffic comes from people who already know you exist. Growing unbranded search is your biggest SEO opportunity for new customer acquisition.</span></div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem;">
-    <div class="stat-card" style="border-top:2px solid #635bff">
-      <div class="stat-label">Total Clicks</div>
-      <div class="stat-value">1,216</div>
-      <div class="stat-sub">from 41,712 impressions</div>
-    </div>
-    <div class="stat-card" style="border-top:2px solid #635bff">
-      <div class="stat-label">Branded Clicks</div>
-      <div class="stat-value">1,161</div>
-      <div class="stat-sub">95% of total · avg pos 2.9</div>
-    </div>
-    <div class="stat-card" style="border-top:2px solid #00c48c">
-      <div class="stat-label">Unbranded Clicks</div>
-      <div class="stat-value">55</div>
-      <div class="stat-sub">5% of total · avg pos 6.1</div>
-    </div>
-    <div class="stat-card" style="border-top:2px solid #f5a623">
-      <div class="stat-label">Unbranded Impressions</div>
-      <div class="stat-value">347</div>
-      <div class="stat-sub">people searching without knowing Privy</div>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">All Queries · Branded vs Unbranded</div>
-        <div class="info-btn">i<span class="tooltip">Your top keyword is 'privy real estate' — branded. CTR = % who clicked after seeing your result. Position = avg Google ranking (1 = top of page 1). High impressions + low CTR = ranking but not earning the click. Fix your meta title/description. Positions 5-15 are your biggest quick wins — a small ranking bump can double your clicks.</span></div>
-      </div>
-      <table>
-        <thead><tr><th>Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
-        <tbody>
-        <tr>
-          <td style="font-size:0.8rem">privy real estate <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>371</td>
-          <td>523</td>
-          <td>70.9%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>288</td>
-          <td>37,365</td>
-          <td>0.8%</td>
-          <td>5.9</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy pro <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>138</td>
-          <td>284</td>
-          <td>48.6%</td>
-          <td>1.8</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy real estate login <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>68</td>
-          <td>75</td>
-          <td>90.7%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy login <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>53</td>
-          <td>1,757</td>
-          <td>3.0%</td>
-          <td>6.9</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privypro <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>40</td>
-          <td>47</td>
-          <td>85.1%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">getprivy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>37</td>
-          <td>49</td>
-          <td>75.5%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy log in <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>36</td>
-          <td>115</td>
-          <td>31.3%</td>
-          <td>7.3</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy pro login <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>27</td>
-          <td>28</td>
-          <td>96.4%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy.pro <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>24</td>
-          <td>55</td>
-          <td>43.6%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privvy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>22</td>
-          <td>927</td>
-          <td>2.4%</td>
-          <td>7.3</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy real estate software <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(0,196,140,0.1);border:1px solid rgba(0,196,140,0.15);color:#00c48c">Unbranded</span></td>
-          <td>19</td>
-          <td>35</td>
-          <td>54.3%</td>
-          <td>1.6</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">start with privy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>19</td>
-          <td>54</td>
-          <td>35.2%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy software <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(0,196,140,0.1);border:1px solid rgba(0,196,140,0.15);color:#00c48c">Unbranded</span></td>
-          <td>14</td>
-          <td>68</td>
-          <td>20.6%</td>
-          <td>16.6</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">get privy now <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>13</td>
-          <td>18</td>
-          <td>72.2%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privvy real estate <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>11</td>
-          <td>25</td>
-          <td>44.0%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy app <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(0,196,140,0.1);border:1px solid rgba(0,196,140,0.15);color:#00c48c">Unbranded</span></td>
-          <td>11</td>
-          <td>217</td>
-          <td>5.1%</td>
-          <td>5.5</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy mls <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(0,196,140,0.1);border:1px solid rgba(0,196,140,0.15);color:#00c48c">Unbranded</span></td>
-          <td>11</td>
-          <td>27</td>
-          <td>40.7%</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">app.privy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>7</td>
-          <td>23</td>
-          <td>30.4%</td>
-          <td>4.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">get privy <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff">Brand</span></td>
-          <td>7</td>
-          <td>20</td>
-          <td>35.0%</td>
-          <td>1.4</td>
-        </tr></tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="info-wrap">
-        <div class="card-title">Unbranded Queries Only · Acquisition Keywords</div>
-        <div class="info-btn">i<span class="tooltip">These are searches from people who don't know Privy yet — pure acquisition traffic. Only 55 unbranded clicks vs 1161 branded this month. This is the gap to close. Create content targeting real estate investor pain points: 'find off-market deals', 'real estate deal finder', 'investor MLS software' etc.</span></div>
-      </div>
-      <table>
-        <thead><tr><th>Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
-        <tbody>
-        <tr>
-          <td style="font-size:0.8rem">privy real estate software</td>
-          <td>19</td>
-          <td>35</td>
-          <td>54.3%</td>
-          <td>1.6</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy software</td>
-          <td>14</td>
-          <td>68</td>
-          <td>20.6%</td>
-          <td>16.6</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy app</td>
-          <td>11</td>
-          <td>217</td>
-          <td>5.1%</td>
-          <td>5.5</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.8rem">privy mls</td>
-          <td>11</td>
-          <td>27</td>
-          <td>40.7%</td>
-          <td>1.0</td>
-        </tr></tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card" style="margin-bottom:1rem">
-    <div class="info-wrap">
-      <div class="card-title">Top Pages by Search Clicks</div>
-      <div class="info-btn">i<span class="tooltip">Your homepage gets the most search clicks but at only 1.5% CTR from 125K impressions — improving your meta description alone could double homepage traffic. The Learning Center articles ranking here are underperforming on CTR — rewrite their page titles to be more specific and benefit-focused.</span></div>
-    </div>
-    <table>
-      <thead><tr><th>Page</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
-      <tbody>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://www.privy.pro/</td>
-          <td>1,268</td>
-          <td>51,960</td>
-          <td>2.4%</td>
-          <td>6.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://app.privy.pro/</td>
-          <td>252</td>
-          <td>5,576</td>
-          <td>4.5%</td>
-          <td>6.9</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://app.privy.pro/registration</td>
-          <td>22</td>
-          <td>1,687</td>
-          <td>1.3%</td>
-          <td>2.9</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/8843010-find-off-market-deals-on-privy</td>
-          <td>17</td>
-          <td>909</td>
-          <td>1.9%</td>
-          <td>4.1</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/9899157-what-is-privy</td>
-          <td>11</td>
-          <td>2,021</td>
-          <td>0.5%</td>
-          <td>3.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/8843612-run-comparables-with-privy</td>
-          <td>6</td>
-          <td>454</td>
-          <td>1.3%</td>
-          <td>6.0</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/10373165-cancel-your-plan</td>
-          <td>5</td>
-          <td>216</td>
-          <td>2.3%</td>
-          <td>7.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/10530613-is-there-a-free-trial-for-privy</td>
-          <td>5</td>
-          <td>739</td>
-          <td>0.7%</td>
-          <td>5.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/8838844-privy-s-direct-to-mls-markets</td>
-          <td>5</td>
-          <td>187</td>
-          <td>2.7%</td>
-          <td>6.2</td>
-        </tr>
-        <tr>
-          <td style="font-size:0.78rem;word-break:break-all">https://learningcenter.privy.pro/en/articles/8843266-update-your-email-address</td>
-          <td>5</td>
-          <td>205</td>
-          <td>2.4%</td>
-          <td>7.1</td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <!-- DEAL TABLE -->
-  <div class="section-info">
-    <div class="section-hdr">📋 Deal Detail · June 2026 · Top 50 by Value</div>
-    <div class="info-btn">i<span class="tooltip">Average deal value is $324. Organic Search accounts for 3 of your top 10 deals by value. Most deals cluster at $931-$2,390 — look for patterns in which sources bring higher-value deals as you scale to prioritize those channels.</span></div>
-  </div>
-  <div class="card" style="margin-bottom:1rem">
-    <table>
-      <thead><tr><th>Deal Name</th><th>Source</th><th>Amount</th><th>Created</th><th>Close Date</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Omiel Fairweather  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$1,430</td>
-          <td>2026-06-05</td>
-          <td>2026-06-05</td>
-        </tr>
-        <tr>
-          <td>Jacobo Ontiveros  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-01</td>
-          <td>2026-06-01</td>
-        </tr>
-        <tr>
-          <td>Tanner Dahl  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$931</td>
-          <td>2026-06-03</td>
-          <td>2026-06-03</td>
-        </tr>
-        <tr>
-          <td>eren cem alioglu  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-04</td>
-          <td>2026-06-04</td>
-        </tr>
-        <tr>
-          <td>Brent Harrison  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$931</td>
-          <td>2026-06-08</td>
-          <td>2026-06-08</td>
-        </tr>
-        <tr>
-          <td>Brent Harrison  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$931</td>
-          <td>2026-06-09</td>
-          <td>2026-06-09</td>
-        </tr>
-        <tr>
-          <td>Reginald Hayes  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$931</td>
-          <td>2026-06-08</td>
-          <td>2026-06-08</td>
-        </tr>
-        <tr>
-          <td>Brian Shaw  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-09</td>
-          <td>2026-06-09</td>
-        </tr>
-        <tr>
-          <td>Griffen Kempskie  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$931</td>
-          <td>2026-06-09</td>
-          <td>2026-06-09</td>
-        </tr>
-        <tr>
-          <td>Gary Buttar  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$931</td>
-          <td>2026-06-09</td>
-          <td>2026-06-09</td>
-        </tr>
-        <tr>
-          <td>Lorenzo Aytes  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-13</td>
-          <td>2026-06-13</td>
-        </tr>
-        <tr>
-          <td>Pedro Diaz  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-13</td>
-          <td>2026-06-13</td>
-        </tr>
-        <tr>
-          <td>Sam Diab  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$931</td>
-          <td>2026-06-16</td>
-          <td>2026-06-16</td>
-        </tr>
-        <tr>
-          <td>Erin Marzano  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>Zohar Elefant  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$931</td>
-          <td>2026-06-23</td>
-          <td>2026-06-23</td>
-        </tr>
-        <tr>
-          <td>Jennifer Hochmiller  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$299</td>
-          <td>2026-06-19</td>
-          <td>2026-06-19</td>
-        </tr>
-        <tr>
-          <td>Abhiram Bharatham  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$249</td>
-          <td>2026-06-03</td>
-          <td>2026-06-03</td>
-        </tr>
-        <tr>
-          <td>Michael King  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$249</td>
-          <td>2026-06-15</td>
-          <td>2026-06-15</td>
-        </tr>
-        <tr>
-          <td>Mohammad Shahid  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$249</td>
-          <td>2026-06-19</td>
-          <td>2026-06-19</td>
-        </tr>
-        <tr>
-          <td>Mike Marchese  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$149</td>
-          <td>2026-06-01</td>
-          <td>2026-06-01</td>
-        </tr>
-        <tr>
-          <td>Tone Burgess  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$149</td>
-          <td>2026-06-10</td>
-          <td>2026-06-10</td>
-        </tr>
-        <tr>
-          <td>Richard Davis  - New Deal</td>
-          <td><span class="badge">Referrals</span></td>
-          <td>$149</td>
-          <td>2026-06-13</td>
-          <td>2026-06-13</td>
-        </tr>
-        <tr>
-          <td>Isam Boukattaya  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$149</td>
-          <td>2026-06-14</td>
-          <td>2026-06-14</td>
-        </tr>
-        <tr>
-          <td>Cameren Faciane  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$149</td>
-          <td>2026-06-17</td>
-          <td>2026-06-17</td>
-        </tr>
-        <tr>
-          <td>Oluwatosin  Sodiq  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$149</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>Joe Rojas  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$149</td>
-          <td>2026-06-23</td>
-          <td>2026-06-23</td>
-        </tr>
-        <tr>
-          <td>Simon Little  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-02</td>
-          <td>2026-06-02</td>
-        </tr>
-        <tr>
-          <td>Victor wynn  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-03</td>
-          <td>2026-06-03</td>
-        </tr>
-        <tr>
-          <td>Benjamin Castillo  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$97</td>
-          <td>2026-06-02</td>
-          <td>2026-06-02</td>
-        </tr>
-        <tr>
-          <td>Diego Persico  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$97</td>
-          <td>2026-06-01</td>
-          <td>2026-06-01</td>
-        </tr>
-        <tr>
-          <td>Michael Goda  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-05</td>
-          <td>2026-06-05</td>
-        </tr>
-        <tr>
-          <td>Matthew Ennis  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-05</td>
-          <td>2026-06-05</td>
-        </tr>
-        <tr>
-          <td>Mark Iroha  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$97</td>
-          <td>2026-06-08</td>
-          <td>2026-06-08</td>
-        </tr>
-        <tr>
-          <td>LUIS FERNANDEZ ALVAREZ  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$97</td>
-          <td>2026-06-08</td>
-          <td>2026-06-08</td>
-        </tr>
-        <tr>
-          <td>Enrique Cardona  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$97</td>
-          <td>2026-06-10</td>
-          <td>2026-06-10</td>
-        </tr>
-        <tr>
-          <td>Rooservelt Akume  - New Deal</td>
-          <td><span class="badge">Paid Search</span></td>
-          <td>$97</td>
-          <td>2026-06-09</td>
-          <td>2026-06-09</td>
-        </tr>
-        <tr>
-          <td>Hamza Malik  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-10</td>
-          <td>2026-06-10</td>
-        </tr>
-        <tr>
-          <td>Steve Porter  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-12</td>
-          <td>2026-06-12</td>
-        </tr>
-        <tr>
-          <td>Mark Iroha  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$97</td>
-          <td>2026-06-13</td>
-          <td>2026-06-13</td>
-        </tr>
-        <tr>
-          <td>Patrick Carrasco  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-14</td>
-          <td>2026-06-14</td>
-        </tr>
-        <tr>
-          <td>Fernando Mares   - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-16</td>
-          <td>2026-06-16</td>
-        </tr>
-        <tr>
-          <td>Robert Wood  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-16</td>
-          <td>2026-06-16</td>
-        </tr>
-        <tr>
-          <td>Nick Bruce  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-17</td>
-          <td>2026-06-17</td>
-        </tr>
-        <tr>
-          <td>Mahamud Ali  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>Bogdan Balanchuk  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>Rosely Wolf  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>William Reed  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-18</td>
-          <td>2026-06-18</td>
-        </tr>
-        <tr>
-          <td>Sayuri Sion  - New Deal</td>
-          <td><span class="badge">Organic Search</span></td>
-          <td>$97</td>
-          <td>2026-06-20</td>
-          <td>2026-06-20</td>
-        </tr>
-        <tr>
-          <td>Scott Voss  - New Deal</td>
-          <td><span class="badge">Offline</span></td>
-          <td>$97</td>
-          <td>2026-06-20</td>
-          <td>2026-06-20</td>
-        </tr>
-        <tr>
-          <td>Shawn Seiler  - New Deal</td>
-          <td><span class="badge">Direct Traffic</span></td>
-          <td>$97</td>
-          <td>2026-06-21</td>
-          <td>2026-06-21</td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <div class="footer">
-    Privy Attribution Dashboard · GA4 Property 299211655 + HubSpot CRM · App login traffic excluded (app.privy.pro) · June 2026 (2026-06-01 to 2026-06-30) · Generated July 11, 2026 at 04:10 PM
-  </div>
-
+<div class="tab-bar" id="tabBar">
+  <span style="color:var(--muted);font-size:0.75rem;padding:0.75rem 0;align-self:center">Loading months...</span>
 </div>
-
+<div class="main" id="dashContent">
+  <div style="padding:4rem;text-align:center;color:var(--muted)">Loading attribution data...</div>
+</div>
 <script>
+const HISTORY_URL = 'https://raw.githubusercontent.com/bensonjuarez-creator/privy-attribution/main/history.json';
 const COLORS = ['#635bff','#00c48c','#ff5c5c','#f5a623','#a78bfa','#6db8fa','#fa966d','#6dfad4'];
 const GRID   = 'rgba(255,255,255,0.05)';
-const TICK   = '#666';
-Chart.defaults.color = TICK;
-Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-Chart.defaults.font.size = 11;
+const BRAND_TERMS = ['privy','privvy','getprivy','privypro','getprivypro'];
+const UNBRANDED_OV = ['privy real estate software','privy software','privy mls','privy real estate app','privy app','privy tool','privy platform','privy alternative','privy competitor','privy review','privy pricing','privy vs','privy free trial'];
 
-new Chart(document.getElementById('trendChart'), {
-  type: 'line',
-  data: { labels: ["06/01", "06/02", "06/03", "06/04", "06/05", "06/06", "06/07", "06/08", "06/09", "06/10", "06/11", "06/12", "06/13", "06/14", "06/15", "06/16", "06/17", "06/18", "06/19", "06/20", "06/21", "06/22", "06/23", "06/24", "06/25", "06/26", "06/27", "06/28", "06/29", "06/30"], datasets: [{
-    data: [361, 341, 318, 308, 305, 213, 194, 347, 327, 309, 305, 305, 226, 234, 350, 355, 426, 503, 558, 414, 353, 518, 325, 300, 393, 337, 439, 375, 537, 474], borderColor: '#635bff', backgroundColor: 'rgba(99,91,255,0.08)',
-    borderWidth: 2, pointRadius: 2, fill: true, tension: 0.4
-  }]},
-  options: { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: { x: { grid: { color: GRID }, ticks: { maxTicksLimit: 8 } },
-               y: { grid: { color: GRID }, beginAtZero: true } } }
-});
+let activeCharts = [];
+let historyData  = [];
 
-new Chart(document.getElementById('channelChart'), {
-  type: 'bar',
-  data: { labels: ["Direct", "Organic Search", "Unassigned", "Referral", "Email", "AI Assistant", "Paid Search", "Organic Video", "Organic Social"], datasets: [{
-    data: [6419, 2918, 655, 568, 236, 66, 59, 57, 41], backgroundColor: COLORS, borderRadius: 4, borderSkipped: false
-  }]},
-  options: { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: { x: { grid: { display: false }, ticks: { maxRotation: 30 } },
-               y: { grid: { color: GRID }, beginAtZero: true } } }
-});
+function isBranded(q) {
+  const lower = q.toLowerCase();
+  if (UNBRANDED_OV.some(o => lower.includes(o))) return false;
+  return BRAND_TERMS.some(t => lower.includes(t));
+}
+function fmtDur(s) {
+  const m = Math.floor((s||0)/60), sec = Math.floor((s||0)%60);
+  return m + 'm ' + String(sec).padStart(2,'0') + 's';
+}
+function fmtMoney(n) { return '$' + Number(n||0).toLocaleString('en-US',{maximumFractionDigits:0}); }
+function fmtNum(n)   { return Number(n||0).toLocaleString(); }
 
-new Chart(document.getElementById('deviceChart'), {
-  type: 'doughnut',
-  data: { labels: ["Desktop", "Mobile", "Tablet", "Smart Tv"], datasets: [{
-    data: [8812, 1766, 52, 1], backgroundColor: COLORS, borderColor: '#15151e', borderWidth: 2
-  }]},
-  options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
-    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: '#e6e6f0' } } } }
-});
+function destroyCharts() {
+  activeCharts.forEach(c => { try { c.destroy(); } catch(e) {} });
+  activeCharts = [];
+}
+function mkChart(id, cfg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  try { const c = new Chart(el, cfg); activeCharts.push(c); return c; }
+  catch(e) { console.warn('Chart error', id, e); }
+}
 
-new Chart(document.getElementById('nrChart'), {
-  type: 'doughnut',
-  data: { labels: ["New", "Returning", "(Not Set)"], datasets: [{
-    data: [7072, 3309, 477], backgroundColor: ['#635bff','#00c48c'], borderColor: '#15151e', borderWidth: 2
-  }]},
-  options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
-    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: '#e6e6f0' } } } }
-});
+function sHdr(icon, label) {
+  return `<div class="section-info"><div class="section-hdr">${icon} ${label}</div></div>`;
+}
+function crd(title, content) {
+  return `<div class="card"><div class="card-title">${title}</div>${content}</div>`;
+}
 
-new Chart(document.getElementById('dealChart'), {
-  type: 'doughnut',
-  data: { labels: ["Direct Traffic", "Organic Search", "Offline", "Paid Search", "Referrals"], datasets: [{
-    data: [35, 13, 11, 1, 1], backgroundColor: COLORS, borderColor: '#15151e', borderWidth: 2
-  }]},
-  options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
-    plugins: { legend: { position: 'right', labels: { boxWidth: 10, padding: 10, color: '#e6e6f0' } } } }
-});
+function buildStats(d) {
+  const sessions = (d.ga4_sessions||[]).reduce((s,r)=>s+r.sessions,0);
+  const topCh = (d.ga4_sessions||[])[0];
+  return `<div class="stats">
+    <div class="stat-card"><div class="stat-label">Total Sessions</div>
+      <div class="stat-value">${fmtNum(sessions)}</div>
+      <div class="stat-sub">GA4 · ${d.month_label} · excl. app logins</div></div>
+    <div class="stat-card"><div class="stat-label">Top Channel</div>
+      <div class="stat-value" style="font-size:1.1rem">${topCh?.channel||'N/A'}</div>
+      <div class="stat-sub">${fmtNum(topCh?.sessions||0)} sessions</div></div>
+    <div class="stat-card"><div class="stat-label">Deals This Month</div>
+      <div class="stat-value">${fmtNum(d.total_deals)}</div>
+      <div class="stat-sub">HubSpot CRM · ${d.month_label}</div></div>
+    <div class="stat-card"><div class="stat-label">Pipeline This Month</div>
+      <div class="stat-value">${fmtMoney(d.total_revenue)}</div>
+      <div class="stat-sub">${d.month_label}</div></div>
+  </div>`;
+}
 
-new Chart(document.getElementById('stageChart'), {
-  type: 'bar',
-  data: { labels: ["Closed Won"], datasets: [{
-    data: [61], backgroundColor: '#635bff99', borderColor: '#635bff',
-    borderWidth: 1.5, borderRadius: 4
-  }]},
-  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-    plugins: { legend: { display: false } },
-    scales: { x: { grid: { color: GRID }, beginAtZero: true },
-               y: { grid: { display: false } } } }
-});
+function buildAI(d) {
+  if (!d.ai_summary) return '';
+  const html = typeof marked !== 'undefined'
+    ? marked.parse(d.ai_summary)
+    : `<pre style="white-space:pre-wrap;font-size:0.85rem">${d.ai_summary}</pre>`;
+  return `${sHdr('🤖',`AI Analysis · ${d.month_label}`)}
+  <div class="card" style="margin-bottom:1rem;border-left:3px solid #635bff">
+    <div class="ai-summary">${html}</div></div>`;
+}
+
+function buildGA4(d) {
+  return `${sHdr('📈',`GA4 Traffic · ${d.month_label}`)}
+  <div class="grid-2">
+    ${crd('Session Trend','<div class="chart-wrap"><canvas id="trendChart"></canvas></div>')}
+    ${crd('Sessions by Channel','<div class="chart-wrap"><canvas id="channelChart"></canvas></div>')}
+  </div>`;
+}
+
+function buildAudience(d) {
+  const maxS = (d.ga4_geo||[])[0]?.sessions||1;
+  const geoRows = (d.ga4_geo||[]).map(g => {
+    const pct = (g.sessions/maxS*100).toFixed(0);
+    return `<tr><td>${g.region}</td><td>${fmtNum(g.sessions)}</td>
+      <td><div style="background:#232330;border-radius:4px;height:8px">
+        <div style="background:#635bff;height:8px;border-radius:4px;width:${pct}%"></div></div></td></tr>`;
+  }).join('');
+  return `${sHdr('👥','Audience Breakdown')}
+  <div class="grid-3">
+    ${crd('Device Breakdown','<div class="chart-wrap-sm"><canvas id="deviceChart"></canvas></div>')}
+    ${crd('New vs Returning','<div class="chart-wrap-sm"><canvas id="nrChart"></canvas></div>')}
+    ${crd('Top Regions',`<table><thead><tr><th>Region</th><th>Sessions</th><th style="width:40%">Share</th></tr></thead>
+      <tbody>${geoRows}</tbody></table>`)}
+  </div>`;
+}
+
+function buildEngagement(d) {
+  const rows = (d.ga4_engagement||[]).map(e =>
+    `<tr><td>${e.channel}</td><td>${fmtNum(e.sessions)}</td>
+     <td>${(e.bounce_rate||0).toFixed(1)}%</td><td>${fmtDur(e.avg_duration)}</td></tr>`
+  ).join('');
+  return `${sHdr('⚡','Engagement by Channel')}
+  <div class="card" style="margin-bottom:1rem"><div class="card-title">Bounce Rate & Session Duration by Channel</div>
+    <table><thead><tr><th>Channel</th><th>Sessions</th><th>Bounce Rate</th><th>Avg Duration</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function buildPages(d) {
+  const rows = (d.ga4_pages||[]).map(p => {
+    const cr = p.sessions>0 ? (p.conversions/p.sessions*100).toFixed(1)+'%' : '—';
+    return `<tr><td style="font-size:0.78rem;word-break:break-all">${p.page}</td>
+      <td>${fmtNum(p.sessions)}</td><td>${p.conversions}</td><td>${cr}</td></tr>`;
+  }).join('');
+  return `${sHdr('🏠',`Top Landing Pages · ${d.month_label}`)}
+  <div class="card" style="margin-bottom:1rem"><div class="card-title">Pages by traffic · ${d.month_label}</div>
+    <table><thead><tr><th>Page</th><th>Sessions</th><th>Conversions</th><th>Conv Rate</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function buildHubSpot(d) {
+  return `${sHdr('💼',`HubSpot Attribution · ${d.month_label}`)}
+  <div class="grid-2">
+    ${crd('Deals by Attribution Source','<div class="chart-wrap"><canvas id="dealChart"></canvas></div>')}
+    ${crd('Deal Stage Funnel','<div class="chart-wrap"><canvas id="stageChart"></canvas></div>')}
+  </div>`;
+}
+
+function buildSources(d) {
+  const rows = (d.source_summary||[]).map(s => {
+    const ttc = s.avg_ttc!=null ? s.avg_ttc.toFixed(0)+'d' : '—';
+    return `<tr><td><span class="badge">${s.source}</span></td>
+      <td>${s.count}</td><td>${s.amount?fmtMoney(s.amount):'—'}</td>
+      <td>${(s.win_rate||0).toFixed(0)}%</td><td>${ttc}</td></tr>`;
+  }).join('');
+  return `${sHdr('🔍','Source Deep Dive · Win Rate & Time to Close')}
+  <div class="card" style="margin-bottom:1rem"><div class="card-title">Performance by attribution source</div>
+    <table><thead><tr><th>Source</th><th>Deals</th><th>Pipeline Value</th><th>Win Rate</th><th>Avg Days to Close</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function buildSC(d) {
+  const qs=d.sc_queries||[], pg=d.sc_pages||[];
+  const totalC=qs.reduce((s,q)=>s+q.clicks,0), totalI=qs.reduce((s,q)=>s+q.impressions,0);
+  const branded=qs.filter(q=>isBranded(q.query)), unbranded=qs.filter(q=>!isBranded(q.query));
+  const bC=branded.reduce((s,q)=>s+q.clicks,0), uC=unbranded.reduce((s,q)=>s+q.clicks,0);
+  const uI=unbranded.reduce((s,q)=>s+q.impressions,0);
+  const bPct=totalC>0?(bC/totalC*100).toFixed(0):0, uPct=totalC>0?(uC/totalC*100).toFixed(0):0;
+  const bPos=bC>0?(branded.reduce((s,q)=>s+q.position*q.clicks,0)/bC).toFixed(1):'—';
+  const uPos=uC>0?(unbranded.reduce((s,q)=>s+q.position*q.clicks,0)/uC).toFixed(1):'—';
+
+  const qRows=qs.slice(0,20).map(q=>{
+    const b=isBranded(q.query);
+    const bc=b?'rgba(99,91,255,0.1);border:1px solid rgba(99,91,255,0.15);color:#635bff'
+              :'rgba(0,196,140,0.1);border:1px solid rgba(0,196,140,0.15);color:#00c48c';
+    return `<tr><td style="font-size:0.8rem">${q.query}
+      <span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;background:${bc}">${b?'Brand':'Unbranded'}</span></td>
+      <td>${fmtNum(q.clicks)}</td><td>${fmtNum(q.impressions)}</td>
+      <td>${(q.ctr||0).toFixed(1)}%</td><td>${(q.position||0).toFixed(1)}</td></tr>`;
+  }).join('');
+
+  const topU=[...unbranded].sort((a,b)=>b.clicks-a.clicks).slice(0,10);
+  const uRows=topU.length?topU.map(q=>
+    `<tr><td style="font-size:0.8rem">${q.query}</td>
+    <td>${fmtNum(q.clicks)}</td><td>${fmtNum(q.impressions)}</td>
+    <td>${(q.ctr||0).toFixed(1)}%</td><td>${(q.position||0).toFixed(1)}</td></tr>`
+  ).join(''):'<tr><td colspan="5" style="color:var(--muted);font-size:0.8rem">No unbranded queries — all traffic is branded.</td></tr>';
+
+  const pRows=pg.slice(0,10).map(p=>
+    `<tr><td style="font-size:0.78rem;word-break:break-all">${p.page||'/'}</td>
+    <td>${fmtNum(p.clicks)}</td><td>${fmtNum(p.impressions)}</td>
+    <td>${(p.ctr||0).toFixed(1)}%</td><td>${(p.position||0).toFixed(1)}</td></tr>`
+  ).join('');
+
+  return `${sHdr('🔎',`Google Search Console · ${d.month_label}`)}
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem">
+    <div class="stat-card" style="border-top:2px solid #635bff">
+      <div class="stat-label">Total Clicks</div><div class="stat-value">${fmtNum(totalC)}</div>
+      <div class="stat-sub">from ${fmtNum(totalI)} impressions</div></div>
+    <div class="stat-card" style="border-top:2px solid #635bff">
+      <div class="stat-label">Branded Clicks</div><div class="stat-value">${fmtNum(bC)}</div>
+      <div class="stat-sub">${bPct}% of total · avg pos ${bPos}</div></div>
+    <div class="stat-card" style="border-top:2px solid #00c48c">
+      <div class="stat-label">Unbranded Clicks</div><div class="stat-value">${fmtNum(uC)}</div>
+      <div class="stat-sub">${uPct}% of total · avg pos ${uPos}</div></div>
+    <div class="stat-card" style="border-top:2px solid #f5a623">
+      <div class="stat-label">Unbranded Impressions</div><div class="stat-value">${fmtNum(uI)}</div>
+      <div class="stat-sub">people searching without knowing Privy</div></div>
+  </div>
+  <div class="grid-2">
+    ${crd('All Queries · Branded vs Unbranded',`<table>
+      <thead><tr><th>Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
+      <tbody>${qRows}</tbody></table>`)}
+    ${crd('Unbranded Only · Acquisition Keywords',`<table>
+      <thead><tr><th>Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
+      <tbody>${uRows}</tbody></table>`)}
+  </div>
+  <div class="card" style="margin-bottom:1rem"><div class="card-title">Top Pages by Search Clicks</div>
+    <table><thead><tr><th>Page</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead>
+    <tbody>${pRows}</tbody></table></div>`;
+}
+
+function buildDeals(d) {
+  const deals=[...(d.deals||[])].sort((a,b)=>b.amount-a.amount).slice(0,50);
+  const rows=deals.map(deal=>
+    `<tr><td>${deal.name}</td>
+    <td><span class="badge">${(deal.source||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</span></td>
+    <td>${deal.amount?fmtMoney(deal.amount):'—'}</td>
+    <td>${deal.created||'—'}</td><td>${deal.closed||'Open'}</td></tr>`
+  ).join('');
+  return `${sHdr('📋',`Deal Detail · ${d.month_label} · Top 50 by Value`)}
+  <div class="card" style="margin-bottom:1rem">
+    <table><thead><tr><th>Deal Name</th><th>Source</th><th>Amount</th><th>Created</th><th>Close Date</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function buildFooter(d) {
+  const gen = d.generated_at ? new Date(d.generated_at).toLocaleString() : 'N/A';
+  return `<div class="footer">Privy Attribution · GA4 Property 299211655 + HubSpot CRM · App login traffic excluded · ${d.month_label} (${d.report_start||''} to ${d.report_end||''}) · Generated ${gen}</div>`;
+}
+
+function createCharts(d) {
+  Chart.defaults.color = '#666';
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 11;
+  const trend=d.ga4_trend||[], chans=d.ga4_sessions||[], devices=d.ga4_devices||[];
+  const nr=d.ga4_new_returning||[], sources=d.source_summary||[], stages=d.stage_summary||[];
+
+  mkChart('trendChart',{type:'line',data:{labels:trend.map(r=>r.date),datasets:[{
+    data:trend.map(r=>r.sessions),borderColor:'#635bff',backgroundColor:'rgba(99,91,255,0.08)',
+    borderWidth:2,pointRadius:2,fill:true,tension:0.4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:GRID},ticks:{maxTicksLimit:8}},y:{grid:{color:GRID},beginAtZero:true}}}});
+
+  mkChart('channelChart',{type:'bar',data:{labels:chans.map(r=>r.channel),datasets:[{
+    data:chans.map(r=>r.sessions),backgroundColor:COLORS,borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{maxRotation:30}},y:{grid:{color:GRID},beginAtZero:true}}}});
+
+  mkChart('deviceChart',{type:'doughnut',data:{labels:devices.map(d=>d.device),datasets:[{
+    data:devices.map(d=>d.sessions),backgroundColor:COLORS,borderColor:'#15151e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,color:'#e6e6f0'}}}}});
+
+  mkChart('nrChart',{type:'doughnut',data:{labels:nr.map(r=>r.type),datasets:[{
+    data:nr.map(r=>r.sessions),backgroundColor:['#635bff','#00c48c'],borderColor:'#15151e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,color:'#e6e6f0'}}}}});
+
+  mkChart('dealChart',{type:'doughnut',data:{labels:sources.slice(0,8).map(s=>s.source),datasets:[{
+    data:sources.slice(0,8).map(s=>s.count),backgroundColor:COLORS,borderColor:'#15151e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'right',labels:{boxWidth:10,padding:10,color:'#e6e6f0'}}}}});
+
+  mkChart('stageChart',{type:'bar',data:{labels:stages.slice(0,8).map(s=>(s.stage||'').substring(0,30)),datasets:[{
+    data:stages.slice(0,8).map(s=>s.count),backgroundColor:'#635bff99',borderColor:'#635bff',
+    borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:GRID},beginAtZero:true},y:{grid:{display:false}}}}});
+}
+
+function renderMonth(d) {
+  destroyCharts();
+  const sub = document.getElementById('headerSub');
+  if (sub) sub.textContent = 'GA4 + HUBSPOT · ' + (d.month_label||'').toUpperCase() + ' (EXCLUDING APP.PRIVY.PRO)';
+  document.getElementById('dashContent').innerHTML = [
+    buildStats(d), buildAI(d), buildGA4(d), buildAudience(d),
+    buildEngagement(d), buildPages(d), buildHubSpot(d),
+    buildSources(d), buildSC(d), buildDeals(d), buildFooter(d)
+  ].join('');
+  requestAnimationFrame(() => createCharts(d));
+}
+
+function renderTabs(data) {
+  document.getElementById('tabBar').innerHTML = data.map((h,i) =>
+    `<button class="tab-btn ${i===0?'active':''}" onclick="selectTab(${i},this)">${h.month_label}</button>`
+  ).join('');
+}
+
+function selectTab(idx, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMonth(historyData[idx]);
+}
+
+async function init() {
+  try {
+    const resp = await fetch(HISTORY_URL + '?nc=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    historyData = (await resp.json()).sort((a,b) => b.month.localeCompare(a.month));
+    if (!historyData.length) throw new Error('No data in history.json');
+    renderTabs(historyData);
+    renderMonth(historyData[0]);
+  } catch(e) {
+    document.getElementById('dashContent').innerHTML =
+      '<div style="padding:2rem;color:#ff5c5c">Error loading dashboard: ' + e.message + '</div>';
+  }
+}
+
+init();
 </script>
 </body>
 </html>
